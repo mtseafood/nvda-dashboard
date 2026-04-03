@@ -1,0 +1,37 @@
+name: Update NVDA Dashboard Daily
+
+on:
+  schedule:
+    # Runs at 9:00 AM Taiwan time (01:00 UTC) every weekday Mon-Fri
+    - cron: '0 1 * * 1-5'
+  workflow_dispatch: # allows manual trigger from GitHub UI
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests yfinance
+
+      - name: Fetch data and rebuild dashboard
+        run: python update_dashboard.py
+
+      - name: Commit and push updated dashboard
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --staged --quiet || git commit -m "Auto-update: $(date +'%Y-%m-%d')"
+          git push
