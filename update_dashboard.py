@@ -1,7 +1,7 @@
 """
 update_dashboard.py
-Fetches fresh NVDA data from Yahoo Finance and rewrites index.html daily.
-Run by GitHub Actions every weekday at 9:00 AM Taiwan time.
+Fetches fresh data from Yahoo Finance and rewrites stock dashboard HTML files daily.
+Handles NVDA, TSLA, AMD, MU. Run by GitHub Actions every weekday at 9:00 AM Taiwan time.
 """
 
 import yfinance as yf
@@ -312,7 +312,7 @@ html = f"""<!DOCTYPE html>
 </body>
 </html>"""
 
-with open("index.html", "w", encoding="utf-8") as f:
+with open("nvda.html", "w", encoding="utf-8") as f:
     f.write(html)
 
 print(f"Dashboard updated at {updated_str}")

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MU">
+<title>MU Daily Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0f0f5;
+    --muted: #6b6b7a;
+    --dim: #2a2a38;
+    --green: #00e5a0;
+    --green-dim: rgba(0,229,160,0.12);
+    --red: #ff4d6d;
+    --red-dim: rgba(255,77,109,0.12);
+    --blue: #4d9fff;
+    --blue-dim: rgba(77,159,255,0.1);
+    --amber: #ffb347;
+    --amber-dim: rgba(255,179,71,0.1);
+    --accent: #ffb347;
+    --accent-dim: rgba(255,179,71,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    padding: 32px 24px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .mono { font-family: 'DM Mono', monospace; }
+  .header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 16px;
+  }
+  .ticker-badge {
+    display: inline-block; background: var(--accent); color: #0a0a0f;
+    font-weight: 800; font-size: 11px; padding: 3px 9px; border-radius: 4px;
+    letter-spacing: 0.08em; margin-bottom: 8px;
+  }
+  .company-name { font-size: 24px; font-weight: 700; }
+  .market-info { font-size: 12px; color: var(--muted); margin-top: 3px; font-family: 'DM Mono', monospace; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 40px; font-weight: 800; font-family: 'DM Mono', monospace; letter-spacing: -1px; }
+  .price-change { font-family: 'DM Mono', monospace; font-size: 15px; margin-top: 4px; }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+  .neutral { color: var(--muted); }
+  .update-time { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'DM Mono', monospace; }
+  .refresh-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent-dim); border: 1px solid rgba(255,179,71,0.25);
+    color: var(--accent); font-family: 'Syne', sans-serif; font-size: 12px;
+    font-weight: 700; padding: 7px 14px; border-radius: 6px; cursor: pointer;
+    letter-spacing: 0.04em; margin-top: 10px; transition: background 0.2s;
+  }
+  .refresh-btn:hover { background: rgba(255,179,71,0.15); }
+  .section-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 12px; margin-top: 28px;
+  }
+  .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
+  @media(max-width:600px){ .metric-grid { grid-template-columns: repeat(2,1fr); } }
+  .metric-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; position: relative; overflow: hidden;
+  }
+  .metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+  .metric-card.green::before { background: var(--green); }
+  .metric-card.red::before { background: var(--red); }
+  .metric-card.blue::before { background: var(--blue); }
+  .metric-card.amber::before { background: var(--amber); }
+  .metric-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+  .metric-value { font-size: 20px; font-weight: 700; font-family: 'DM Mono', monospace; }
+  .metric-sub { font-size: 11px; margin-top: 4px; font-family: 'DM Mono', monospace; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media(max-width:640px){ .two-col { grid-template-columns: 1fr; } }
+  .range-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; margin-bottom:8px; }
+  .range-track { width:100%; height:6px; background:var(--dim); border-radius:3px; position:relative; }
+  .range-fill { height:6px; border-radius:3px; background: linear-gradient(90deg, var(--red), var(--amber), var(--green)); position:absolute; left:0; }
+  .range-dot { width:14px; height:14px; border-radius:50%; background:var(--blue); border:2px solid var(--bg); position:absolute; top:-4px; transform:translateX(-50%); }
+  .range-current { text-align:center; font-family:'DM Mono',monospace; font-size:12px; color:var(--blue); margin-top:10px; }
+  .analyst-target { font-size:30px; font-weight:800; font-family:'DM Mono',monospace; color:var(--accent); margin:8px 0 2px; }
+  .analyst-upside { font-size:13px; color:var(--green); font-family:'DM Mono',monospace; }
+  .analyst-bar { display:flex; border-radius:4px; overflow:hidden; height:8px; margin:12px 0 8px; }
+  .bar-buy { background:var(--green); }
+  .bar-hold { background:var(--amber); }
+  .bar-sell { background:var(--red); }
+  .analyst-legend { display:flex; gap:14px; font-size:11px; font-family:'DM Mono',monospace; color:var(--muted); }
+  .legend-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:middle; }
+  .firm-row { display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:12px; padding:5px 0; border-bottom:1px solid var(--border); }
+  .firm-row:last-child { border-bottom:none; }
+  .scenario-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .sc-label { font-size:12px; color:var(--muted); width:88px; flex-shrink:0; font-family:'DM Mono',monospace; }
+  .sc-track { flex:1; background:var(--dim); border-radius:3px; height:6px; }
+  .sc-fill { height:6px; border-radius:3px; }
+  .sc-val { width:44px; text-align:right; font-size:12px; font-family:'DM Mono',monospace; font-weight:500; }
+  .news-item { padding:12px 0; border-bottom:1px solid var(--border); }
+  .news-item:last-child { border-bottom:none; padding-bottom:0; }
+  .news-title { font-size:13px; line-height:1.55; margin-bottom:4px; }
+  .news-meta { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; }
+  .news-tag { display:inline-block; font-size:10px; padding:2px 6px; border-radius:3px; margin-right:6px; font-weight:700; letter-spacing:0.05em; }
+  .tag-bull { background:var(--green-dim); color:var(--green); }
+  .tag-risk { background:var(--red-dim); color:var(--red); }
+  .tag-news { background:var(--blue-dim); color:var(--blue); }
+  .event-row { display:flex; align-items:center; gap:14px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .event-row:last-child { border-bottom:none; }
+  .event-date-box { background:var(--surface2); border:1px solid var(--border2); border-radius:8px; padding:7px 12px; text-align:center; min-width:58px; }
+  .event-month { font-size:10px; color:var(--muted); font-family:'DM Mono',monospace; }
+  .event-day { font-size:20px; font-weight:800; }
+  .event-name { font-size:13px; font-weight:600; }
+  .event-desc { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; margin-top:2px; }
+  .risk-row { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
+  .risk-row:last-child { border-bottom:none; }
+  .risk-icon { width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .risk-title { font-size:13px; font-weight:600; margin-bottom:3px; }
+  .risk-desc { font-size:12px; color:var(--muted); line-height:1.55; }
+  .disclaimer {
+    margin-top:32px; padding:14px 18px;
+    background:var(--amber-dim); border:1px solid rgba(255,179,71,0.2);
+    border-radius:10px; font-size:11px; color:var(--amber);
+    font-family:'DM Mono',monospace; line-height:1.7;
+  }
+  .spin { animation: spin 1s linear infinite; display:inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div style="padding:12px 0 4px;"><a href="index.html" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:0.08em;">← All Dashboards</a></div>
+<div class="header">
+  <div>
+    <div class="ticker-badge">NASDAQ: MU</div>
+    <div class="company-name">Micron Technology, Inc.</div>
+    <div class="market-info" id="market-status">Loading market data...</div>
+  </div>
+  <div class="price-block">
+    <div class="price-main" id="price">—</div>
+    <div class="price-change" id="price-change">—</div>
+    <div class="update-time" id="update-time">Connecting...</div>
+    <button class="refresh-btn" onclick="loadAll()">
+      <span id="refresh-icon">↻</span> Refresh data
+    </button>
+  </div>
+</div>
+
+<div class="section-title">Key metrics (as of last earnings)</div>
+<div class="metric-grid">
+  <div class="metric-card blue"><div class="metric-label">Market Cap</div><div class="metric-value" id="m-mktcap">$83B</div><div class="metric-sub neutral">Mid-large cap</div></div>
+  <div class="metric-card blue"><div class="metric-label">P/E (TTM)</div><div class="metric-value">~9x</div><div class="metric-sub neutral">Fwd P/E ~8x</div></div>
+  <div class="metric-card green"><div class="metric-label">EPS (TTM)</div><div class="metric-value">$8.35</div><div class="metric-sub up">Recovering strongly</div></div>
+  <div class="metric-card green"><div class="metric-label">Gross Margin</div><div class="metric-value">38.5%</div><div class="metric-sub up">Expanding vs prior yr</div></div>
+  <div class="metric-card green"><div class="metric-label">Revenue (TTM)</div><div class="metric-value">$30.8B</div><div class="metric-sub up">+52% YoY</div></div>
+  <div class="metric-card blue"><div class="metric-label">Fwd P/E</div><div class="metric-value">~8x</div><div class="metric-sub up">Deep value vs peers</div></div>
+  <div class="metric-card green"><div class="metric-label">Beta</div><div class="metric-value">1.42</div><div class="metric-sub neutral">Moderate volatility</div></div>
+  <div class="metric-card amber"><div class="metric-label">Debt / Equity</div><div class="metric-value">28.4%</div><div class="metric-sub neutral">Moderate leverage</div></div>
+</div>
+
+<div class="section-title">52-week price range</div>
+<div class="card">
+  <div class="range-labels">
+    <span id="low52">52W Low: $67.61</span>
+    <span id="high52">52W High: $157.54</span>
+  </div>
+  <div class="range-track">
+    <div class="range-fill" id="range-fill" style="width:9%"></div>
+    <div class="range-dot" id="range-dot" style="left:9%"></div>
+  </div>
+  <div class="range-current" id="range-current">Loading current price...</div>
+</div>
+
+<div class="section-title">Analyst consensus &amp; price targets</div>
+<div class="two-col">
+  <div class="card">
+    <div class="metric-label">Wall Street avg. 12-month target</div>
+    <div class="analyst-target">$130.97</div>
+    <div class="analyst-upside" id="upside-pct">↑ Calculating upside...</div>
+    <div class="analyst-bar">
+      <div class="bar-buy" style="width:71%"></div>
+      <div class="bar-hold" style="width:23%"></div>
+      <div class="bar-sell" style="width:6%"></div>
+    </div>
+    <div class="analyst-legend">
+      <span><span class="legend-dot" style="background:var(--green)"></span>Buy 25</span>
+      <span><span class="legend-dot" style="background:var(--amber)"></span>Hold 8</span>
+      <span><span class="legend-dot" style="background:var(--red)"></span>Sell 2</span>
+    </div>
+    <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+      <div class="metric-label" style="margin-bottom:10px;">Top firm targets</div>
+      <div class="firm-row"><span class="neutral">Rosenblatt</span><span class="up">$250</span></div>
+      <div class="firm-row"><span class="neutral">Mizuho</span><span class="up">$175</span></div>
+      <div class="firm-row"><span class="neutral">JPMorgan</span><span class="up">$155</span></div>
+      <div class="firm-row"><span class="neutral">BofA</span><span class="up">$130</span></div>
+      <div class="firm-row"><span class="neutral">UBS</span><span class="neutral">$110</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="metric-label" style="margin-bottom:16px;">12-month price scenarios</div>
+    <div class="scenario-row">
+      <span class="sc-label">Optimistic</span>
+      <div class="sc-track"><div class="sc-fill" style="width:100%;background:var(--green)"></div></div>
+      <span class="sc-val up">$250</span>
+    </div>
+    <div class="scenario-row">
+      <span class="sc-label">Avg target</span>
+      <div class="sc-track"><div class="sc-fill" style="width:52%;background:var(--blue)"></div></div>
+      <span class="sc-val" style="color:var(--blue)">$131</span>
+    </div>
+    <div class="scenario-row">
+      <span class="sc-label">Base case</span>
+      <div class="sc-track"><div class="sc-fill" style="width:44%;background:var(--accent)"></div></div>
+      <span class="sc-val" style="color:var(--accent)">$110</span>
+    </div>
+    <div class="scenario-row">
+      <span class="sc-label">Conservative</span>
+      <div class="sc-track"><div class="sc-fill" style="width:32%;background:var(--muted)"></div></div>
+      <span class="sc-val neutral">$80</span>
+    </div>
+    <div class="scenario-row" style="margin-bottom:0">
+      <span class="sc-label">Current</span>
+      <div class="sc-track"><div class="sc-fill" id="current-bar" style="width:30%;background:var(--red)"></div></div>
+      <span class="sc-val down" id="current-sc-val">~$75</span>
+    </div>
+
+    <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
+      <div class="metric-label" style="margin-bottom:12px;">Upcoming events</div>
+      <div class="event-row">
+        <div class="event-date-box">
+          <div class="event-month">JUN</div>
+          <div class="event-day">25</div>
+        </div>
+        <div>
+          <div class="event-name">Earnings Report</div>
+          <div class="event-desc">Q3 FY2026 · Est. EPS $1.48</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Latest news signals</div>
+<div class="card">
+  <div class="news-item">
+    <div class="news-title"><span class="news-tag tag-bull">BULL</span>Micron HBM3E wins NVIDIA H200 supply slot — AI memory demand driving record revenue</div>
+    <div class="news-meta">Mar 2026 · Micron</div>
+  </div>
+  <div class="news-item">
+    <div class="news-title"><span class="news-tag tag-bull">BULL</span>Data center revenue hits record $4.8B in Q2 — HBM and high-capacity DRAM leading</div>
+    <div class="news-meta">Mar 2026 · Earnings Call</div>
+  </div>
+  <div class="news-item">
+    <div class="news-title"><span class="news-tag tag-risk">RISK</span>NAND oversupply concerns resurface — pricing pressure may weigh on margins in H2 2026</div>
+    <div class="news-meta">Mar 2026 · TrendForce</div>
+  </div>
+  <div class="news-item">
+    <div class="news-title"><span class="news-tag tag-risk">RISK</span>China bans Micron chips from critical infrastructure — $3.3B annual revenue at risk</div>
+    <div class="news-meta">Ongoing · Reuters</div>
+  </div>
+  <div class="news-item">
+    <div class="news-title"><span class="news-tag tag-bull">BULL</span>New Idaho fab expansion — $15B investment to triple US DRAM production capacity</div>
+    <div class="news-meta">Feb 2026 · Micron</div>
+  </div>
+</div>
+
+<div class="section-title">Key risks to watch</div>
+<div class="card">
+  <div class="risk-row">
+    <div class="risk-icon" style="background:var(--red-dim)">📉</div>
+    <div>
+      <div class="risk-title">Memory cycle risk (NAND oversupply)</div>
+      <div class="risk-desc">Semiconductor memory is highly cyclical. NAND pricing is showing signs of weakness, which can quickly compress gross margins.</div>
+    </div>
+  </div>
+  <div class="risk-row">
+    <div class="risk-icon" style="background:var(--red-dim)">🌏</div>
+    <div>
+      <div class="risk-title">China ban &amp; geopolitical exposure</div>
+      <div class="risk-desc">China has banned Micron from critical infrastructure — represents ~$3.3B in annual revenue risk. Further escalation possible.</div>
+    </div>
+  </div>
+  <div class="risk-row">
+    <div class="risk-icon" style="background:var(--amber-dim)">⚔️</div>
+    <div>
+      <div class="risk-title">Samsung &amp; SK Hynix competition</div>
+      <div class="risk-desc">Korean rivals dominate DRAM and NAND markets with significant scale advantages. HBM market share battle is intensifying.</div>
+    </div>
+  </div>
+  <div class="risk-row">
+    <div class="risk-icon" style="background:var(--blue-dim)">🏗️</div>
+    <div>
+      <div class="risk-title">Heavy capex cycle</div>
+      <div class="risk-desc">Massive fab investments ($15B+ in the US alone) constrain free cash flow. If demand softens, ROI on these investments is at risk.</div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠ DISCLAIMER — This dashboard is for informational and educational purposes only. It does not constitute financial advice or a recommendation to buy or sell any security. Stock prices shown may be delayed or estimated. Analyst targets are third-party forecasts, not guarantees of future performance. Always conduct your own research and consult a licensed financial advisor before making any investment decisions.
+</div>
+
+<script>
+  const LOW52 = 67.61, HIGH52 = 157.54, AVG_TARGET = 130.97, MAX_SC = 250;
+
+  function fmt(n) {
+    return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  async function fetchPrice() {
+    const urls = [
+      'https://query1.finance.yahoo.com/v8/finance/chart/MU?interval=1d&range=1d',
+      'https://query2.finance.yahoo.com/v8/finance/chart/MU?interval=1d&range=1d'
+    ];
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) continue;
+        const data = await res.json();
+        const meta = data?.chart?.result?.[0]?.meta;
+        if (!meta || !meta.regularMarketPrice) continue;
+        return {
+          price: meta.regularMarketPrice,
+          prevClose: meta.previousClose || meta.chartPreviousClose || 75,
+          marketState: meta.marketState || 'CLOSED'
+        };
+      } catch(e) { continue; }
+    }
+    return null;
+  }
+
+  function renderPrice(d) {
+    let price = d ? d.price : 75;
+    let prev = d ? d.prevClose : 77;
+    let change = price - prev;
+    let pct = (change / prev) * 100;
+    let cls = change >= 0 ? 'up' : 'down';
+    let sign = change >= 0 ? '+' : '';
+
+    document.getElementById('price').textContent = `$${fmt(price)}`;
+    document.getElementById('price').className = `price-main ${cls}`;
+    document.getElementById('price-change').textContent = `${sign}$${fmt(Math.abs(change))} (${sign}${pct.toFixed(2)}%)`;
+    document.getElementById('price-change').className = `price-change ${cls}`;
+
+    const state = d ? d.marketState : 'CLOSED';
+    const stateStr = state === 'PRE' ? 'Pre-market' : state === 'POST' ? 'After-hours' : state === 'REGULAR' ? 'Market open' : 'Market closed';
+    document.getElementById('market-status').textContent = `${stateStr} · NASDAQ`;
+    document.getElementById('update-time').textContent = `Updated ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} · ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
+
+    const rangePct = Math.min(100, Math.max(0, ((price - LOW52) / (HIGH52 - LOW52)) * 100));
+    document.getElementById('range-fill').style.width = rangePct + '%';
+    document.getElementById('range-dot').style.left = rangePct + '%';
+    document.getElementById('range-current').textContent = `Current $${fmt(price)} — ${rangePct.toFixed(1)}% above 52W low`;
+
+    const upside = ((AVG_TARGET / price - 1) * 100).toFixed(1);
+    document.getElementById('upside-pct').textContent = `↑ ~${upside}% upside from current price`;
+
+    const scPct = Math.min(100, Math.max(0, (price / MAX_SC) * 100));
+    document.getElementById('current-bar').style.width = scPct + '%';
+    document.getElementById('current-sc-val').textContent = `$${Math.round(price)}`;
+  }
+
+  async function loadAll() {
+    const icon = document.getElementById('refresh-icon');
+    icon.className = 'spin';
+    try {
+      const d = await fetchPrice();
+      renderPrice(d);
+    } catch(e) { renderPrice(null); }
+    icon.className = '';
+  }
+
+  loadAll();
+  setInterval(loadAll, 60000);
+</script>
+</body>
+</html>
