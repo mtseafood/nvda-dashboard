@@ -163,10 +163,40 @@
   </div>
 </a>
 
+<a class="stock-card" href="avgo.html">
+  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#a78bfa;"></div>
+  <div class="sector-badge" style="background:rgba(167,139,250,0.1);color:#a78bfa;border:1px solid rgba(167,139,250,0.25);">SEMICONDUCTOR · NETWORKING</div>
+  <div class="card-row">
+    <div>
+      <div class="ticker">AVGO</div>
+      <div class="company">Broadcom Inc. · NASDAQ</div>
+    </div>
+    <div class="price-col">
+      <div class="price" id="price-AVGO">—</div>
+      <div class="change" id="change-AVGO"><span class="loading">Loading...</span></div>
+    </div>
+  </div>
+</a>
+
+<a class="stock-card" href="mrvl.html">
+  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#34d399;"></div>
+  <div class="sector-badge" style="background:rgba(52,211,153,0.1);color:#34d399;border:1px solid rgba(52,211,153,0.25);">SEMICONDUCTOR · DATA INFRA</div>
+  <div class="card-row">
+    <div>
+      <div class="ticker">MRVL</div>
+      <div class="company">Marvell Technology · NASDAQ</div>
+    </div>
+    <div class="price-col">
+      <div class="price" id="price-MRVL">—</div>
+      <div class="change" id="change-MRVL"><span class="loading">Loading...</span></div>
+    </div>
+  </div>
+</a>
+
 <div class="update-note" id="update-note">Fetching live prices...</div>
 
 <script>
-  const tickers = ['NVDA', 'TSLA', 'AMD', 'MU'];
+  const tickers = ['NVDA', 'TSLA', 'AMD', 'MU', 'AVGO', 'MRVL'];
 
   function fmt(n) {
     return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
