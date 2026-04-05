@@ -4,283 +4,155 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="AMD">
-<title>AMD 每日儀表板</title>
+<title>AMD 儀表板</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f; --surface: #111118; --surface2: #18181f;
-    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
-    --text: #f0f0f5; --muted: #6b6b7a; --dim: #2a2a38;
-    --green: #00e5a0; --green-dim: rgba(0,229,160,0.12);
-    --red: #ff4d6d; --red-dim: rgba(255,77,109,0.12);
-    --blue: #4d9fff; --blue-dim: rgba(77,159,255,0.1);
-    --amber: #ffb347; --amber-dim: rgba(255,179,71,0.1);
-    --accent: #ff4d6d; --accent-dim: rgba(255,77,109,0.08);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; min-height: 100vh; padding: 32px 24px; max-width: 980px; margin: 0 auto; }
-  .header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 16px; }
-  .ticker-badge { display: inline-block; background: var(--accent); color: #fff; font-weight: 900; font-size: 11px; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.08em; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
-  .company-name { font-size: 24px; font-weight: 700; }
-  .market-info { font-size: 12px; color: var(--muted); margin-top: 3px; }
-  .price-block { text-align: right; }
-  .price-main { font-size: 40px; font-weight: 700; font-family: 'DM Mono', monospace; letter-spacing: -1px; }
-  .price-change { font-family: 'DM Mono', monospace; font-size: 15px; margin-top: 4px; }
-  .up { color: var(--green); } .down { color: var(--red); } .neutral { color: var(--muted); }
-  .update-time { font-size: 11px; color: var(--muted); margin-top: 4px; }
-  .refresh-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-dim); border: 1px solid rgba(255,77,109,0.25); color: var(--accent); font-family: 'Noto Sans TC', sans-serif; font-size: 12px; font-weight: 700; padding: 7px 14px; border-radius: 6px; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
-  .refresh-btn:hover { background: rgba(255,77,109,0.15); }
-  .section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 12px; margin-top: 28px; }
-  .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
-  @media(max-width:600px){ .metric-grid { grid-template-columns: repeat(2,1fr); } }
-  .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; position: relative; overflow: hidden; }
-  .metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
-  .metric-card.green::before { background: var(--green); } .metric-card.red::before { background: var(--red); } .metric-card.blue::before { background: var(--blue); } .metric-card.amber::before { background: var(--amber); }
-  .metric-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'DM Mono', monospace; }
-  .metric-value { font-size: 20px; font-weight: 700; font-family: 'DM Mono', monospace; }
-  .metric-sub { font-size: 11px; margin-top: 4px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  @media(max-width:640px){ .two-col { grid-template-columns: 1fr; } }
-  .range-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:8px; }
-  .range-track { width:100%; height:6px; background:var(--dim); border-radius:3px; position:relative; }
-  .range-fill { height:6px; border-radius:3px; background: linear-gradient(90deg, var(--red), var(--amber), var(--green)); position:absolute; left:0; }
-  .range-dot { width:14px; height:14px; border-radius:50%; background:var(--blue); border:2px solid var(--bg); position:absolute; top:-4px; transform:translateX(-50%); }
-  .range-current { text-align:center; font-size:12px; color:var(--blue); margin-top:10px; font-family:'DM Mono',monospace; }
-  .analyst-target { font-size:30px; font-weight:700; font-family:'DM Mono',monospace; color:var(--accent); margin:8px 0 2px; }
-  .analyst-upside { font-size:13px; color:var(--green); }
-  .analyst-bar { display:flex; border-radius:4px; overflow:hidden; height:8px; margin:12px 0 8px; }
-  .bar-buy { background:var(--green); } .bar-hold { background:var(--amber); } .bar-sell { background:var(--red); }
-  .analyst-legend { display:flex; gap:14px; font-size:11px; color:var(--muted); }
-  .legend-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:middle; }
-  .firm-row { display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:12px; padding:5px 0; border-bottom:1px solid var(--border); }
-  .firm-row:last-child { border-bottom:none; }
-  .scenario-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .sc-label { font-size:12px; color:var(--muted); width:70px; flex-shrink:0; }
-  .sc-track { flex:1; background:var(--dim); border-radius:3px; height:6px; }
-  .sc-fill { height:6px; border-radius:3px; }
-  .sc-val { width:48px; text-align:right; font-size:12px; font-family:'DM Mono',monospace; font-weight:500; }
-  .news-item { padding:12px 0; border-bottom:1px solid var(--border); }
-  .news-item:last-child { border-bottom:none; padding-bottom:0; }
-  .news-title { font-size:13px; line-height:1.65; margin-bottom:4px; }
-  .news-meta { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; }
-  .news-tag { display:inline-block; font-size:10px; padding:2px 6px; border-radius:3px; margin-right:6px; font-weight:700; }
-  .tag-bull { background:var(--green-dim); color:var(--green); } .tag-risk { background:var(--red-dim); color:var(--red); } .tag-news { background:var(--blue-dim); color:var(--blue); }
-  .event-row { display:flex; align-items:center; gap:14px; padding:10px 0; border-bottom:1px solid var(--border); }
-  .event-row:last-child { border-bottom:none; }
-  .event-date-box { background:var(--surface2); border:1px solid var(--border2); border-radius:8px; padding:7px 12px; text-align:center; min-width:58px; }
-  .event-month { font-size:10px; color:var(--muted); font-family:'DM Mono',monospace; }
-  .event-day { font-size:20px; font-weight:700; font-family:'DM Mono',monospace; }
-  .event-name { font-size:13px; font-weight:600; }
-  .event-desc { font-size:11px; color:var(--muted); margin-top:2px; }
-  .risk-row { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
-  .risk-row:last-child { border-bottom:none; }
-  .risk-icon { width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
-  .risk-title { font-size:13px; font-weight:600; margin-bottom:3px; }
-  .risk-desc { font-size:12px; color:var(--muted); line-height:1.65; }
-  .disclaimer { margin-top:32px; padding:14px 18px; background:var(--amber-dim); border:1px solid rgba(255,179,71,0.2); border-radius:10px; font-size:11px; color:var(--amber); line-height:1.8; }
-  .spin { animation: spin 1s linear infinite; display:inline-block; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  :root{--bg:#f5f5f7;--surface:#ffffff;--surface2:#f5f5f7;--text:#1d1d1f;--muted:#86868b;--border:#d2d2d7;--up:#1a7f4b;--down:#c0392b;--accent:#ef4444;--shadow:0 1px 3px rgba(0,0,0,0.08);}
+  @media(prefers-color-scheme:dark){:root{--bg:#000000;--surface:#1c1c1e;--surface2:#2c2c2e;--text:#f5f5f7;--muted:#86868b;--border:#3a3a3c;--shadow:0 1px 3px rgba(0,0,0,0.5);}}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:14px;min-height:100vh;padding:20px 20px 48px;max-width:720px;margin:0 auto;}
+  a{color:inherit;text-decoration:none;}
+  .back{font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:4px;margin-bottom:20px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:var(--shadow);}
+  .header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:12px;}
+  .ticker-label{font-size:12px;font-weight:500;color:var(--accent);font-family:'DM Mono',monospace;letter-spacing:0.06em;margin-bottom:4px;}
+  .company-name{font-size:20px;font-weight:700;letter-spacing:-0.01em;}
+  .market-status{font-size:12px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;}
+  .price-col{text-align:right;}
+  .price{font-size:36px;font-weight:500;font-family:'DM Mono',monospace;letter-spacing:-0.02em;}
+  .price-change{font-size:14px;font-family:'DM Mono',monospace;margin-top:2px;}
+  .update-row{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:6px;}
+  .update-time{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
+  .refresh-btn{font-size:12px;color:var(--muted);background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'DM Mono',monospace;}
+  .refresh-btn:hover{color:var(--text);border-color:var(--text);}
+  .up{color:var(--up);}.down{color:var(--down);}.neutral{color:var(--muted);}
+  .section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;}
+  .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;}
+  @media(max-width:500px){.metric-grid{grid-template-columns:repeat(2,1fr);}}
+  .metric-cell{background:var(--surface);padding:14px 16px;}
+  .metric-l{font-size:11px;color:var(--muted);margin-bottom:5px;font-family:'DM Mono',monospace;}
+  .metric-v{font-size:18px;font-weight:500;font-family:'DM Mono',monospace;}
+  .metric-s{font-size:11px;color:var(--muted);margin-top:2px;}
+  .range-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:10px;}
+  .range-track{height:4px;background:var(--border);border-radius:2px;position:relative;margin-bottom:8px;}
+  .range-fill{position:absolute;left:0;top:0;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--down),#f59e0b,var(--up));}
+  .range-dot{position:absolute;top:-4px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);transform:translateX(-50%);}
+  .range-current{font-size:12px;color:var(--accent);font-family:'DM Mono',monospace;text-align:center;margin-top:8px;}
+  .analyst-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;}
+  .analyst-target{font-size:28px;font-weight:500;font-family:'DM Mono',monospace;}
+  .analyst-upside{font-size:13px;color:var(--up);font-family:'DM Mono',monospace;text-align:right;}
+  .bar-row{display:flex;height:4px;border-radius:2px;overflow:hidden;margin-bottom:10px;}
+  .bar-buy{background:var(--up);}.bar-hold{background:#f59e0b;}.bar-sell{background:var(--down);}
+  .bar-legend{display:flex;gap:14px;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
+  .legend-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle;}
+  .divider{height:1px;background:var(--border);margin:14px 0;}
+  .firm-row{display:flex;justify-content:space-between;font-size:13px;font-family:'DM Mono',monospace;padding:6px 0;border-bottom:1px solid var(--border);}
+  .firm-row:last-child{border-bottom:none;}
+  .news-item{padding:12px 0;border-bottom:1px solid var(--border);}
+  .news-item:first-child{padding-top:0;}.news-item:last-child{border-bottom:none;padding-bottom:0;}
+  .news-title{font-size:13px;line-height:1.6;margin-bottom:4px;}
+  .news-meta{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
+  .tag{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;margin-right:5px;letter-spacing:0.04em;}
+  .tag-bull{background:#d1fae5;color:#065f46;}.tag-risk{background:#fee2e2;color:#991b1b;}.tag-news{background:#dbeafe;color:#1e40af;}
+  @media(prefers-color-scheme:dark){.tag-bull{background:rgba(16,185,129,0.15);color:#6ee7b7;}.tag-risk{background:rgba(239,68,68,0.15);color:#fca5a5;}.tag-news{background:rgba(59,130,246,0.15);color:#93c5fd;}}
+  .event-row{display:flex;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+  .event-row:last-child{border-bottom:none;padding-bottom:0;}
+  .event-date{background:var(--surface2);border-radius:8px;padding:6px 12px;text-align:center;min-width:52px;}
+  .event-month{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;}
+  .event-day{font-size:20px;font-weight:600;font-family:'DM Mono',monospace;}
+  .event-name{font-size:13px;font-weight:600;}.event-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+  .risk-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+  .risk-item:first-child{padding-top:0;}.risk-item:last-child{border-bottom:none;padding-bottom:0;}
+  .risk-icon{font-size:18px;flex-shrink:0;width:28px;text-align:center;}
+  .risk-title{font-size:13px;font-weight:600;margin-bottom:3px;}
+  .risk-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+  .disclaimer{font-size:11px;color:var(--muted);line-height:1.7;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;}
+  .spin{animation:spin 1s linear infinite;display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
-<div style="padding:12px 0 4px;"><a href="index.html" style="font-size:11px;color:var(--muted);text-decoration:none;font-family:'DM Mono',monospace;">← 所有儀表板</a></div>
-<div class="header">
-  <div>
-    <div class="ticker-badge">那斯達克：AMD</div>
-    <div class="company-name">超微半導體（AMD）</div>
-    <div class="market-info" id="market-status">載入市場資料中...</div>
-  </div>
-  <div class="price-block">
-    <div class="price-main" id="price">—</div>
-    <div class="price-change" id="price-change">—</div>
-    <div class="update-time" id="update-time">連線中...</div>
-    <button class="refresh-btn" onclick="loadAll()"><span id="refresh-icon">↻</span> 重新整理</button>
-  </div>
-</div>
-
-<div class="section-title">關鍵指標（上季財報）</div>
-<div class="metric-grid">
-  <div class="metric-card blue"><div class="metric-label">市值</div><div class="metric-value">$154B</div><div class="metric-sub neutral">大型股</div></div>
-  <div class="metric-card amber"><div class="metric-label">本益比（TTM）</div><div class="metric-value">~70x</div><div class="metric-sub neutral">預期本益比 22x</div></div>
-  <div class="metric-card green"><div class="metric-label">每股盈餘（TTM）</div><div class="metric-value">$1.42</div><div class="metric-sub up">超越預期 +3.2%</div></div>
-  <div class="metric-card green"><div class="metric-label">毛利率</div><div class="metric-value">50.1%</div><div class="metric-sub up">年比擴張</div></div>
-  <div class="metric-card green"><div class="metric-label">營收（TTM）</div><div class="metric-value">$25.8B</div><div class="metric-sub up">+14% YoY</div></div>
-  <div class="metric-card blue"><div class="metric-label">預期本益比</div><div class="metric-value">22x</div><div class="metric-sub neutral">相較同業合理</div></div>
-  <div class="metric-card amber"><div class="metric-label">貝塔係數</div><div class="metric-value">1.78</div><div class="metric-sub down">高於市場波動</div></div>
-  <div class="metric-card green"><div class="metric-label">負債權益比</div><div class="metric-value">3.2%</div><div class="metric-sub up">負債極低</div></div>
-</div>
-
-<div class="section-title">52週股價區間</div>
+<a class="back" href="index.html">← 自選股</a>
 <div class="card">
-  <div class="range-labels">
-    <span id="low52">52週低點：$76.50</span>
-    <span id="high52">52週高點：$187.28</span>
+  <div class="header">
+    <div><div class="ticker-label">那斯達克・AMD</div><div class="company-name">超微半導體</div><div class="market-status" id="market-status">載入中...</div></div>
+    <div class="price-col"><div class="price" id="price">—</div><div class="price-change" id="price-change">—</div><div class="update-row"><span class="update-time" id="update-time"></span><button class="refresh-btn" onclick="loadAll()"><span id="refresh-icon">↻</span></button></div></div>
   </div>
-  <div class="range-track">
-    <div class="range-fill" id="range-fill" style="width:17%"></div>
-    <div class="range-dot" id="range-dot" style="left:17%"></div>
+</div>
+<div class="card">
+  <div class="section-label">關鍵指標</div>
+  <div class="metric-grid">
+    <div class="metric-cell"><div class="metric-l">市值</div><div class="metric-v">$154B</div><div class="metric-s neutral">大型股</div></div>
+    <div class="metric-cell"><div class="metric-l">本益比 TTM</div><div class="metric-v">~70x</div><div class="metric-s neutral">預期 22x</div></div>
+    <div class="metric-cell"><div class="metric-l">每股盈餘 TTM</div><div class="metric-v">$1.42</div><div class="metric-s up">超預期 +3.2%</div></div>
+    <div class="metric-cell"><div class="metric-l">毛利率</div><div class="metric-v">50.1%</div><div class="metric-s up">年比擴張</div></div>
+    <div class="metric-cell"><div class="metric-l">營收 TTM</div><div class="metric-v">$25.8B</div><div class="metric-s up">+14% YoY</div></div>
+    <div class="metric-cell"><div class="metric-l">預期本益比</div><div class="metric-v">22x</div><div class="metric-s neutral">相較同業合理</div></div>
+    <div class="metric-cell"><div class="metric-l">貝塔係數</div><div class="metric-v">1.78</div><div class="metric-s down">高於市場</div></div>
+    <div class="metric-cell"><div class="metric-l">負債權益比</div><div class="metric-v">3.2%</div><div class="metric-s up">負債極低</div></div>
   </div>
+</div>
+<div class="card">
+  <div class="section-label">52 週股價區間</div>
+  <div class="range-row"><span id="low52">低 $76.50</span><span id="high52">高 $187.28</span></div>
+  <div class="range-track"><div class="range-fill" id="range-fill" style="width:17%"></div><div class="range-dot" id="range-dot" style="left:17%"></div></div>
   <div class="range-current" id="range-current">載入現價中...</div>
 </div>
-
-<div class="section-title">分析師共識與目標價</div>
-<div class="two-col">
-  <div class="card">
-    <div class="metric-label">華爾街12個月平均目標價</div>
-    <div class="analyst-target">$139.09</div>
-    <div class="analyst-upside" id="upside-pct">↑ 計算潛在漲幅中...</div>
-    <div class="analyst-bar">
-      <div class="bar-buy" style="width:67%"></div>
-      <div class="bar-hold" style="width:28%"></div>
-      <div class="bar-sell" style="width:5%"></div>
-    </div>
-    <div class="analyst-legend">
-      <span><span class="legend-dot" style="background:var(--green)"></span>買進 35</span>
-      <span><span class="legend-dot" style="background:var(--amber)"></span>持有 14</span>
-      <span><span class="legend-dot" style="background:var(--red)"></span>賣出 2</span>
-    </div>
-    <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
-      <div class="metric-label" style="margin-bottom:10px;">主要機構目標價</div>
-      <div class="firm-row"><span class="neutral">Rosenblatt</span><span class="up">$225</span></div>
-      <div class="firm-row"><span class="neutral">美銀</span><span class="up">$175</span></div>
-      <div class="firm-row"><span class="neutral">摩根大通</span><span class="up">$160</span></div>
-      <div class="firm-row"><span class="neutral">花旗</span><span class="up">$150</span></div>
-      <div class="firm-row"><span class="neutral">高盛</span><span class="neutral">$129</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="metric-label" style="margin-bottom:16px;">12個月股價情境</div>
-    <div class="scenario-row">
-      <span class="sc-label">樂觀</span>
-      <div class="sc-track"><div class="sc-fill" style="width:100%;background:var(--green)"></div></div>
-      <span class="sc-val up">$225</span>
-    </div>
-    <div class="scenario-row">
-      <span class="sc-label">平均目標</span>
-      <div class="sc-track"><div class="sc-fill" style="width:62%;background:var(--blue)"></div></div>
-      <span class="sc-val" style="color:var(--blue)">$139</span>
-    </div>
-    <div class="scenario-row">
-      <span class="sc-label">基本情境</span>
-      <div class="sc-track"><div class="sc-fill" style="width:57%;background:var(--accent)"></div></div>
-      <span class="sc-val" style="color:var(--accent)">$129</span>
-    </div>
-    <div class="scenario-row">
-      <span class="sc-label">保守</span>
-      <div class="sc-track"><div class="sc-fill" style="width:40%;background:var(--muted)"></div></div>
-      <span class="sc-val neutral">$90</span>
-    </div>
-    <div class="scenario-row" style="margin-bottom:0">
-      <span class="sc-label">現價</span>
-      <div class="sc-track"><div class="sc-fill" id="current-bar" style="width:42%;background:var(--red)"></div></div>
-      <span class="sc-val down" id="current-sc-val">~$95</span>
-    </div>
-    <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
-      <div class="metric-label" style="margin-bottom:12px;">即將到來的事件</div>
-      <div class="event-row">
-        <div class="event-date-box"><div class="event-month">APR</div><div class="event-day">29</div></div>
-        <div><div class="event-name">財報發布</div><div class="event-desc">2026 Q1・預估每股盈餘 $1.57</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="section-title">最新新聞訊號</div>
 <div class="card">
-  <div class="news-item">
-    <div class="news-title"><span class="news-tag tag-bull">利多</span>超微 Instinct MI350X GPU 發布——瞄準輝達 H200 於人工智慧訓練市場</div>
-    <div class="news-meta">2026/03・AMD</div>
-  </div>
-  <div class="news-item">
-    <div class="news-title"><span class="news-tag tag-bull">利多</span>Meta 與微軟確認擴大超微 GPU 採購訂單，用於 2026 年資料中心建置</div>
-    <div class="news-meta">2026/03・Bloomberg</div>
-  </div>
-  <div class="news-item">
-    <div class="news-title"><span class="news-tag tag-risk">風險</span>對沖基金以13年來最快速度拋售輝達、超微、特斯拉</div>
-    <div class="news-meta">2026/04/03・TipRanks</div>
-  </div>
-  <div class="news-item">
-    <div class="news-title"><span class="news-tag tag-news">新聞</span>超微收購 Silo AI——歐洲最大人工智慧實驗室，擴展軟體生態系</div>
-    <div class="news-meta">2026/02・路透社</div>
-  </div>
-  <div class="news-item">
-    <div class="news-title"><span class="news-tag tag-bull">利多</span>Ryzen 9000 系列在 PC 市場持續搶市——英特爾面臨持續逆風</div>
-    <div class="news-meta">2026/03・AnandTech</div>
-  </div>
+  <div class="section-label">分析師共識</div>
+  <div class="analyst-top"><div><div class="metric-l">華爾街12個月平均目標價</div><div class="analyst-target">$139.09</div></div><div class="analyst-upside" id="upside-pct">計算中...</div></div>
+  <div class="bar-row"><div class="bar-buy" style="width:67%"></div><div class="bar-hold" style="width:28%"></div><div class="bar-sell" style="width:5%"></div></div>
+  <div class="bar-legend"><span><span class="legend-dot" style="background:var(--up)"></span>買進 35</span><span><span class="legend-dot" style="background:#f59e0b"></span>持有 14</span><span><span class="legend-dot" style="background:var(--down)"></span>賣出 2</span></div>
+  <div class="divider"></div>
+  <div class="firm-row"><span class="neutral">Rosenblatt</span><span class="up">$225</span></div>
+  <div class="firm-row"><span class="neutral">美銀</span><span class="up">$175</span></div>
+  <div class="firm-row"><span class="neutral">摩根大通</span><span class="up">$160</span></div>
+  <div class="firm-row"><span class="neutral">花旗</span><span class="up">$150</span></div>
+  <div class="firm-row"><span class="neutral">高盛</span><span class="neutral">$129</span></div>
 </div>
-
-<div class="section-title">需關注的主要風險</div>
 <div class="card">
-  <div class="risk-row">
-    <div class="risk-icon" style="background:var(--red-dim)">⚔️</div>
-    <div>
-      <div class="risk-title">輝達在 AI GPU 市場的主導地位</div>
-      <div class="risk-desc">輝達持有約80%以上 AI GPU 市場份額。超微 MI300/MI350 系列必須證明效能可比性，才能贏得超大型雲端業者合約。</div>
-    </div>
-  </div>
-  <div class="risk-row">
-    <div class="risk-icon" style="background:var(--amber-dim)">🌏</div>
-    <div>
-      <div class="risk-title">對中國出口管制</div>
-      <div class="risk-desc">美國出口限制阻礙超微在中國銷售 AI 加速器——一個被封鎖的重大潛在市場。</div>
-    </div>
-  </div>
-  <div class="risk-row">
-    <div class="risk-icon" style="background:var(--blue-dim)">📉</div>
-    <div>
-      <div class="risk-title">機構拋售壓力</div>
-      <div class="risk-desc">對沖基金正以較高速度減持半導體部位，造成近期股價下行壓力。</div>
-    </div>
-  </div>
-  <div class="risk-row">
-    <div class="risk-icon" style="background:var(--green-dim)">💻</div>
-    <div>
-      <div class="risk-title">PC 市場週期性風險</div>
-      <div class="risk-desc">消費者 PC 市場正在復甦但仍偏弱。若景氣轉差，遊戲 CPU/GPU 營收將受壓。</div>
-    </div>
-  </div>
+  <div class="section-label">即將到來的事件</div>
+  <div class="event-row"><div class="event-date"><div class="event-month">APR</div><div class="event-day">29</div></div><div><div class="event-name">財報發布</div><div class="event-desc">2026 Q1・預估每股盈餘 $1.57</div></div></div>
 </div>
-
-<div class="disclaimer">
-  ⚠ 免責聲明 — 本儀表板僅供資訊與教育目的使用，不構成任何買賣證券的財務建議或推薦。所示股價可能存在延遲或為估算值。分析師目標價為第三方預測，並非未來績效之保證。進行任何投資決策前，請務必進行自行研究並諮詢持牌財務顧問。
+<div class="card">
+  <div class="section-label">最新新聞</div>
+  <div class="news-item"><div class="news-title"><span class="tag tag-bull">利多</span>超微 MI350X GPU 發布，瞄準輝達 H200 AI 訓練市場</div><div class="news-meta">2026/03・AMD</div></div>
+  <div class="news-item"><div class="news-title"><span class="tag tag-bull">利多</span>Meta 與微軟確認擴大超微 GPU 訂單用於2026年資料中心</div><div class="news-meta">2026/03・Bloomberg</div></div>
+  <div class="news-item"><div class="news-title"><span class="tag tag-risk">風險</span>對沖基金以13年最快速度拋售輝達、超微、特斯拉</div><div class="news-meta">2026/04/03・TipRanks</div></div>
+  <div class="news-item"><div class="news-title"><span class="tag tag-news">新聞</span>超微收購 Silo AI——歐洲最大 AI 實驗室，擴展軟體生態系</div><div class="news-meta">2026/02・路透社</div></div>
+  <div class="news-item"><div class="news-title"><span class="tag tag-bull">利多</span>Ryzen 9000 系列在 PC 市場持續搶市，英特爾面臨逆風</div><div class="news-meta">2026/03・AnandTech</div></div>
 </div>
-
+<div class="card">
+  <div class="section-label">主要風險</div>
+  <div class="risk-item"><div class="risk-icon">⚔️</div><div><div class="risk-title">輝達在 AI GPU 市場的主導地位</div><div class="risk-desc">輝達持有約80%以上 AI GPU 市場份額。超微 MI350 系列必須證明效能可比性才能贏得超大型雲端業者合約。</div></div></div>
+  <div class="risk-item"><div class="risk-icon">🌏</div><div><div class="risk-title">對中國出口管制</div><div class="risk-desc">美國出口限制阻礙超微在中國銷售 AI 加速器，封鎖重大潛在市場機會。</div></div></div>
+  <div class="risk-item"><div class="risk-icon">📉</div><div><div class="risk-title">機構拋售壓力</div><div class="risk-desc">對沖基金正以較高速度減持半導體部位，造成近期股價下行壓力。</div></div></div>
+  <div class="risk-item"><div class="risk-icon">💻</div><div><div class="risk-title">PC 市場週期性風險</div><div class="risk-desc">消費者 PC 市場復甦偏弱，若景氣轉差，遊戲 CPU/GPU 營收將受壓。</div></div></div>
+</div>
+<div class="disclaimer">⚠ 免責聲明 — 本儀表板僅供資訊與教育目的使用，不構成任何買賣證券的財務建議。股價可能存在延遲，分析師目標價為第三方預測。進行任何投資決策前，請諮詢持牌財務顧問。</div>
 <script>
-  const LOW52 = 76.50, HIGH52 = 187.28, AVG_TARGET = 139.09, MAX_SC = 225;
-  function fmt(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-  async function fetchPrice() {
-    const urls = ['https://corsproxy.io/?https://query1.finance.yahoo.com/v8/finance/chart/AMD?interval=1d&range=1d','https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/AMD?interval=1d&range=1d'];
-    for (const url of urls) { try { const res = await fetch(url); if (!res.ok) continue; const data = await res.json(); const meta = data?.chart?.result?.[0]?.meta; if (!meta || !meta.regularMarketPrice) continue; return { price: meta.regularMarketPrice, prevClose: meta.previousClose || meta.chartPreviousClose || 95, marketState: meta.marketState || 'CLOSED' }; } catch(e) { continue; } }
-    return null;
+  const LOW52=76.50,HIGH52=187.28,AVG_TARGET=139.09;
+  function fmt(n){return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  async function fetchPrice(){
+    const urls=['https://corsproxy.io/?https://query1.finance.yahoo.com/v8/finance/chart/AMD?interval=1d&range=1d','https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/AMD?interval=1d&range=1d'];
+    for(const url of urls){try{const res=await fetch(url);if(!res.ok)continue;const meta=(await res.json())?.chart?.result?.[0]?.meta;if(!meta?.regularMarketPrice)continue;return{price:meta.regularMarketPrice,prevClose:meta.previousClose||meta.chartPreviousClose||95,state:meta.marketState||'CLOSED'};}catch(e){continue;}}return null;
   }
-  function renderPrice(d) {
-    let price = d ? d.price : 95, prev = d ? d.prevClose : 97;
-    let change = price - prev, pct = (change / prev) * 100;
-    let cls = change >= 0 ? 'up' : 'down', sign = change >= 0 ? '+' : '';
-    document.getElementById('price').textContent = `$${fmt(price)}`;
-    document.getElementById('price').className = `price-main ${cls}`;
-    document.getElementById('price-change').textContent = `${sign}$${fmt(Math.abs(change))} (${sign}${pct.toFixed(2)}%)`;
-    document.getElementById('price-change').className = `price-change ${cls}`;
-    const state = d ? d.marketState : 'CLOSED';
-    const stateStr = state === 'PRE' ? '盤前交易' : state === 'POST' ? '盤後交易' : state === 'REGULAR' ? '市場開盤中' : '市場已收盤';
-    document.getElementById('market-status').textContent = `${stateStr}・那斯達克`;
-    document.getElementById('update-time').textContent = `更新於 ${new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})}・${new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric'})}`;
-    const rangePct = Math.min(100, Math.max(0, ((price - LOW52) / (HIGH52 - LOW52)) * 100));
-    document.getElementById('range-fill').style.width = rangePct + '%';
-    document.getElementById('range-dot').style.left = rangePct + '%';
-    document.getElementById('range-current').textContent = `現價 $${fmt(price)}・高於52週低點 ${rangePct.toFixed(1)}%`;
-    document.getElementById('upside-pct').textContent = `↑ 相對現價潛在漲幅約 ${((AVG_TARGET / price - 1) * 100).toFixed(1)}%`;
-    const scPct = Math.min(100, Math.max(0, (price / MAX_SC) * 100));
-    document.getElementById('current-bar').style.width = scPct + '%';
-    document.getElementById('current-sc-val').textContent = `$${Math.round(price)}`;
+  function render(d){
+    const price=d?.price??95,prev=d?.prevClose??97,change=price-prev,pct=(change/prev)*100,cls=change>=0?'up':'down',sign=change>=0?'+':'';
+    document.getElementById('price').textContent=`$${fmt(price)}`;document.getElementById('price').className=`price ${cls}`;
+    document.getElementById('price-change').textContent=`${sign}$${fmt(Math.abs(change))}  ${sign}${pct.toFixed(2)}%`;document.getElementById('price-change').className=`price-change ${cls}`;
+    const st=d?.state??'CLOSED';document.getElementById('market-status').textContent=(st==='PRE'?'盤前':st==='POST'?'盤後':st==='REGULAR'?'開盤中':'已收盤')+'・那斯達克';
+    document.getElementById('update-time').textContent=new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+    const rp=Math.min(100,Math.max(0,(price-LOW52)/(HIGH52-LOW52)*100));
+    document.getElementById('range-fill').style.width=rp+'%';document.getElementById('range-dot').style.left=rp+'%';
+    document.getElementById('range-current').textContent=`$${fmt(price)}・高於52週低點 ${rp.toFixed(1)}%`;
+    document.getElementById('upside-pct').textContent=`↑ ${((AVG_TARGET/price-1)*100).toFixed(1)}% 潛在漲幅`;
   }
-  async function loadAll() { const icon = document.getElementById('refresh-icon'); icon.className = 'spin'; try { renderPrice(await fetchPrice()); } catch(e) { renderPrice(null); } icon.className = ''; }
-  loadAll(); setInterval(loadAll, 60000);
+  async function loadAll(){document.getElementById('refresh-icon').className='spin';try{render(await fetchPrice());}catch(e){render(null);}document.getElementById('refresh-icon').className='';}
+  loadAll();setInterval(loadAll,60000);
 </script>
 </body>
 </html>
