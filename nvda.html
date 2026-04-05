@@ -121,6 +121,8 @@
 
   .spin { animation: spin 1s linear infinite; display: inline-block; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .co-logo-hd { width:48px; height:48px; border-radius:12px; object-fit:contain; padding:6px; background:#fff; border:1px solid var(--border); flex-shrink:0; }
+  @media(prefers-color-scheme:dark) { .co-logo-hd { background:#2c2c2e; } }
 </style>
 </head>
 <body>
@@ -129,10 +131,13 @@
 
 <div class="card">
   <div class="header">
-    <div>
-      <div class="ticker-label">那斯達克・NVDA</div>
-      <div class="company-name">輝達公司</div>
-      <div class="market-status" id="market-status">載入中...</div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img class="co-logo-hd" src="https://logo.clearbit.com/nvidia.com" alt="NVDA" onerror="this.style.display='none'">
+      <div>
+        <div class="ticker-label">那斯達克・NVDA</div>
+        <div class="company-name">輝達公司</div>
+        <div class="market-status" id="market-status">載入中...</div>
+      </div>
     </div>
     <div class="price-col">
       <div class="price" id="price">—</div>
