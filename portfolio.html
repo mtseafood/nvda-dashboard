@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="投資組合">
+<title>投資組合績效</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f5f5f7;--surface:#ffffff;--surface2:#f5f5f7;--text:#1d1d1f;--muted:#86868b;--border:#d2d2d7;--up:#1a7f4b;--down:#c0392b;--shadow:0 1px 3px rgba(0,0,0,0.08);}
+  @media(prefers-color-scheme:dark){:root{--bg:#000000;--surface:#1c1c1e;--surface2:#2c2c2e;--text:#f5f5f7;--muted:#86868b;--border:#3a3a3c;--shadow:0 1px 3px rgba(0,0,0,0.5);}}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:14px;min-height:100vh;padding:20px 20px 60px;max-width:720px;margin:0 auto;}
+  a{color:inherit;text-decoration:none;}
+  .back{font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:4px;margin-bottom:20px;}
+  h1{font-size:24px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px;}
+  .subtitle{font-size:13px;color:var(--muted);margin-bottom:24px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:var(--shadow);}
+  .section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;}
+  .up{color:var(--up);}.down{color:var(--down);}.neutral{color:var(--muted);}
+
+  /* Summary row */
+  .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;}
+  @media(min-width:480px){.summary-grid{grid-template-columns:repeat(4,1fr);}}
+  .summary-cell{background:var(--surface);padding:14px 16px;}
+  .sum-label{font-size:11px;color:var(--muted);margin-bottom:5px;font-family:'DM Mono',monospace;}
+  .sum-value{font-size:20px;font-weight:500;font-family:'DM Mono',monospace;}
+  .sum-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+
+  /* Form */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media(min-width:480px){.form-grid{grid-template-columns:repeat(4,1fr);}}
+  .field label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px;font-family:'DM Mono',monospace;}
+  .field input,.field select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:14px;font-family:'DM Mono',monospace;color:var(--text);outline:none;}
+  .field input:focus,.field select:focus{border-color:var(--text);}
+  .btn-add{width:100%;margin-top:12px;padding:11px;background:var(--text);color:var(--bg);border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:'Noto Sans TC',sans-serif;cursor:pointer;}
+  .btn-add:active{opacity:0.8;}
+
+  /* Position cards */
+  .pos-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:8px;box-shadow:var(--shadow);}
+  .pos-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+  .pos-left{display:flex;align-items:center;gap:10px;}
+  .pos-logo{width:36px;height:36px;border-radius:8px;object-fit:contain;padding:4px;background:#fff;border:1px solid var(--border);flex-shrink:0;}
+  @media(prefers-color-scheme:dark){.pos-logo{background:#2c2c2e;}}
+  .pos-symbol{font-size:16px;font-weight:700;font-family:'DM Mono',monospace;}
+  .pos-date{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
+  .pos-pnl{text-align:right;}
+  .pos-pnl-amt{font-size:18px;font-weight:500;font-family:'DM Mono',monospace;}
+  .pos-pnl-pct{font-size:12px;font-family:'DM Mono',monospace;margin-top:2px;}
+  .pos-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .pos-metric{background:var(--surface2);border-radius:8px;padding:10px 12px;}
+  .pm-label{font-size:10px;color:var(--muted);margin-bottom:3px;font-family:'DM Mono',monospace;}
+  .pm-value{font-size:14px;font-weight:500;font-family:'DM Mono',monospace;}
+  .pos-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+  .pos-note{font-size:11px;color:var(--muted);}
+  .btn-del{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;font-family:'DM Mono',monospace;}
+  .btn-del:hover{color:var(--down);}
+
+  .empty-state{text-align:center;padding:40px 20px;color:var(--muted);}
+  .empty-icon{font-size:36px;margin-bottom:12px;}
+  .empty-text{font-size:14px;}
+  .spin{animation:spin 1s linear infinite;display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .tag-ann{display:inline-block;font-size:10px;font-weight:600;padding:1px 7px;border-radius:4px;margin-left:6px;letter-spacing:0.04em;}
+  .tag-up{background:#d1fae5;color:#065f46;}
+  .tag-dn{background:#fee2e2;color:#991b1b;}
+  @media(prefers-color-scheme:dark){.tag-up{background:rgba(16,185,129,0.15);color:#6ee7b7;}.tag-dn{background:rgba(239,68,68,0.15);color:#fca5a5;}}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 自選股</a>
+<h1>投資組合</h1>
+<p class="subtitle">記錄買進成本・追蹤即時損益</p>
+
+<!-- Summary -->
+<div class="card" id="summary-card" style="display:none">
+  <div class="section-label">整體績效</div>
+  <div class="summary-grid">
+    <div class="summary-cell"><div class="sum-label">總投入成本</div><div class="sum-value" id="sum-cost">—</div></div>
+    <div class="summary-cell"><div class="sum-label">目前市值</div><div class="sum-value" id="sum-value">—</div></div>
+    <div class="summary-cell"><div class="sum-label">未實現損益</div><div class="sum-value" id="sum-pnl">—</div><div class="sum-sub" id="sum-pnl-pct"></div></div>
+    <div class="summary-cell"><div class="sum-label">持倉數量</div><div class="sum-value" id="sum-count">—</div><div class="sum-sub" id="sum-updated"></div></div>
+  </div>
+</div>
+
+<!-- Add position form -->
+<div class="card">
+  <div class="section-label">新增持倉</div>
+  <div class="form-grid">
+    <div class="field">
+      <label>股票代碼</label>
+      <select id="f-symbol">
+        <option value="NVDA">NVDA・輝達</option>
+        <option value="TSLA">TSLA・特斯拉</option>
+        <option value="AMD">AMD・超微</option>
+        <option value="MU">MU・美光</option>
+        <option value="AVGO">AVGO・博通</option>
+        <option value="MRVL">MRVL・邁威爾</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>買進日期</label>
+      <input type="date" id="f-date">
+    </div>
+    <div class="field">
+      <label>買進價格 (USD)</label>
+      <input type="number" id="f-price" placeholder="0.00" min="0" step="0.01">
+    </div>
+    <div class="field">
+      <label>持股數量</label>
+      <input type="number" id="f-shares" placeholder="0" min="0.001" step="0.001">
+    </div>
+  </div>
+  <button class="btn-add" onclick="addPosition()">＋ 新增</button>
+</div>
+
+<!-- Positions list -->
+<div id="positions-list"></div>
+
+<script>
+  const COMPANIES = {
+    NVDA: { name:'輝達公司', logo:'nvidia.com', detail:'nvda.html' },
+    TSLA: { name:'特斯拉公司', logo:'tesla.com', detail:'tsla.html' },
+    AMD:  { name:'超微半導體', logo:'amd.com', detail:'amd.html' },
+    MU:   { name:'美光科技', logo:'micron.com', detail:'mu.html' },
+    AVGO: { name:'博通公司', logo:'broadcom.com', detail:'avgo.html' },
+    MRVL: { name:'邁威爾科技', logo:'marvell.com', detail:'mrvl.html' },
+  };
+
+  // ── Storage ────────────────────────────────────────────────────────────────
+  function load() { try { return JSON.parse(localStorage.getItem('portfolio') || '[]'); } catch(e) { return []; } }
+  function save(data) { localStorage.setItem('portfolio', JSON.stringify(data)); }
+
+  // ── Fetch live prices ──────────────────────────────────────────────────────
+  const priceCache = {};
+  async function fetchPrice(symbol) {
+    if (priceCache[symbol]) return priceCache[symbol];
+    const yf = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
+    const urls = [
+      'https://corsproxy.io/?' + yf,
+      `https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`,
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent(yf)
+    ];
+    for (const url of urls) {
+      try {
+        const res = await fetch(url); if (!res.ok) continue;
+        const meta = (await res.json())?.chart?.result?.[0]?.meta;
+        if (!meta?.regularMarketPrice) continue;
+        priceCache[symbol] = meta.regularMarketPrice;
+        return meta.regularMarketPrice;
+      } catch(e) { continue; }
+    }
+    return null;
+  }
+
+  // ── Formatters ─────────────────────────────────────────────────────────────
+  function fmtUSD(n) { return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+  function fmtPct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
+  function daysBetween(dateStr) {
+    const ms = Date.now() - new Date(dateStr).getTime();
+    return Math.max(1, Math.floor(ms / 86400000));
+  }
+
+  // ── Add position ───────────────────────────────────────────────────────────
+  function addPosition() {
+    const symbol = document.getElementById('f-symbol').value;
+    const date   = document.getElementById('f-date').value;
+    const price  = parseFloat(document.getElementById('f-price').value);
+    const shares = parseFloat(document.getElementById('f-shares').value);
+    if (!date || isNaN(price) || price <= 0 || isNaN(shares) || shares <= 0) {
+      alert('請填寫所有欄位'); return;
+    }
+    const data = load();
+    data.push({ id: Date.now().toString(), symbol, date, buyPrice: price, shares });
+    save(data);
+    document.getElementById('f-price').value = '';
+    document.getElementById('f-shares').value = '';
+    renderAll();
+  }
+
+  // ── Delete position ────────────────────────────────────────────────────────
+  function deletePosition(id) {
+    if (!confirm('確定刪除這筆持倉？')) return;
+    save(load().filter(p => p.id !== id));
+    renderAll();
+  }
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+  async function renderAll() {
+    const data = load();
+    const list = document.getElementById('positions-list');
+    document.getElementById('summary-card').style.display = data.length ? '' : 'none';
+
+    if (data.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">尚未新增任何持倉<br>填寫上方表單開始追蹤</div></div>`;
+      return;
+    }
+
+    // Show loading placeholders
+    list.innerHTML = data.map(p => `<div class="pos-card" id="pos-${p.id}"><div style="color:var(--muted);font-size:12px;font-family:'DM Mono',monospace;padding:8px 0;"><span class="spin">↻</span> 載入 ${p.symbol} 報價...</div></div>`).join('');
+
+    // Fetch all prices in parallel
+    const symbols = [...new Set(data.map(p => p.symbol))];
+    await Promise.all(symbols.map(fetchPrice));
+
+    let totalCost = 0, totalValue = 0;
+
+    data.forEach(p => {
+      const currentPrice = priceCache[p.symbol];
+      const cost  = p.buyPrice * p.shares;
+      const value = currentPrice ? currentPrice * p.shares : null;
+      const pnl   = value !== null ? value - cost : null;
+      const pct   = pnl !== null ? (pnl / cost) * 100 : null;
+      const days  = daysBetween(p.date);
+      const ann   = pct !== null ? ((Math.pow(value/cost, 365/days) - 1) * 100) : null;
+      const co    = COMPANIES[p.symbol];
+      const cls   = pnl === null ? 'neutral' : pnl >= 0 ? 'up' : 'down';
+      const sign  = pnl !== null && pnl >= 0 ? '+' : '';
+
+      if (value !== null) { totalCost += cost; totalValue += value; }
+
+      document.getElementById(`pos-${p.id}`).innerHTML = `
+        <div class="pos-header">
+          <div class="pos-left">
+            <img class="pos-logo" src="https://logo.clearbit.com/${co.logo}" alt="${p.symbol}" onerror="this.style.display='none'">
+            <div>
+              <div class="pos-symbol">${p.symbol}</div>
+              <div class="pos-date">${p.date} · ${days} 天</div>
+            </div>
+          </div>
+          <div class="pos-pnl">
+            <div class="pos-pnl-amt ${cls}">${pnl !== null ? sign + fmtUSD(pnl) : '—'}</div>
+            <div class="pos-pnl-pct ${cls}">${pct !== null ? fmtPct(pct) : '—'}
+              ${ann !== null ? `<span class="tag-ann ${ann >= 0 ? 'tag-up' : 'tag-dn'}">${ann >= 0 ? '+' : ''}${ann.toFixed(1)}% 年化</span>` : ''}
+            </div>
+          </div>
+        </div>
+        <div class="pos-metrics">
+          <div class="pos-metric"><div class="pm-label">買進價</div><div class="pm-value">${fmtUSD(p.buyPrice)}</div></div>
+          <div class="pos-metric"><div class="pm-label">現價</div><div class="pm-value ${cls}">${currentPrice ? fmtUSD(currentPrice) : '—'}</div></div>
+          <div class="pos-metric"><div class="pm-label">持股</div><div class="pm-value">${p.shares}</div></div>
+          <div class="pos-metric"><div class="pm-label">投入成本</div><div class="pm-value">${fmtUSD(cost)}</div></div>
+          <div class="pos-metric"><div class="pm-label">目前市值</div><div class="pm-value">${value !== null ? fmtUSD(value) : '—'}</div></div>
+          <div class="pos-metric"><div class="pm-label">持有天數</div><div class="pm-value">${days} 天</div></div>
+        </div>
+        <div class="pos-footer">
+          <span class="pos-note">${co.name}</span>
+          <button class="btn-del" onclick="deletePosition('${p.id}')">刪除</button>
+        </div>`;
+    });
+
+    // Update summary
+    const totalPnl = totalValue - totalCost;
+    const totalPct = totalCost > 0 ? (totalPnl / totalCost) * 100 : 0;
+    const pnlCls   = totalPnl >= 0 ? 'up' : 'down';
+    const pnlSign  = totalPnl >= 0 ? '+' : '';
+    document.getElementById('sum-cost').textContent  = fmtUSD(totalCost);
+    document.getElementById('sum-value').textContent  = fmtUSD(totalValue);
+    document.getElementById('sum-pnl').textContent   = pnlSign + fmtUSD(totalPnl);
+    document.getElementById('sum-pnl').className     = `sum-value ${pnlCls}`;
+    document.getElementById('sum-pnl-pct').textContent = fmtPct(totalPct);
+    document.getElementById('sum-pnl-pct').className  = pnlCls;
+    document.getElementById('sum-count').textContent  = data.length + ' 筆';
+    document.getElementById('sum-updated').textContent = new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}) + ' 更新';
+  }
+
+  // Set today as default date
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+
+  renderAll();
+</script>
+</body>
+</html>
