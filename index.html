@@ -197,9 +197,11 @@
   }
 
   async function fetchPrice(symbol) {
+    const yf = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
     const urls = [
-      `https://corsproxy.io/?https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`,
-      `https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`
+      'https://corsproxy.io/?' + yf,
+      `https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`,
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent(yf)
     ];
     for (const url of urls) {
       try {

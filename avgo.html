@@ -134,10 +134,11 @@
 </div>
 <div class="disclaimer">⚠ 免責聲明 — 本儀表板僅供資訊與教育目的使用，不構成任何買賣證券的財務建議。股價可能存在延遲，分析師目標價為第三方預測。進行任何投資決策前，請諮詢持牌財務顧問。</div>
 <script>
-  const LOW52=116.36,HIGH52=251.88,AVG_TARGET=240.47;
+  let LOW52=116.36,HIGH52=251.88,AVG_TARGET=240.47;
   function fmt(n){return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
   async function fetchPrice(){
-    const urls=['https://corsproxy.io/?https://query1.finance.yahoo.com/v8/finance/chart/AVGO?interval=1d&range=1d','https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/AVGO?interval=1d&range=1d'];
+    const yf='https://query1.finance.yahoo.com/v8/finance/chart/AVGO?interval=1d&range=1d';
+    const urls=['https://corsproxy.io/?'+yf,'https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/AVGO?interval=1d&range=1d','https://api.allorigins.win/raw?url='+encodeURIComponent(yf)];
     for(const url of urls){try{const res=await fetch(url);if(!res.ok)continue;const meta=(await res.json())?.chart?.result?.[0]?.meta;if(!meta?.regularMarketPrice)continue;return{price:meta.regularMarketPrice,prevClose:meta.previousClose||meta.chartPreviousClose||175,state:meta.marketState||'CLOSED'};}catch(e){continue;}}return null;
   }
   function render(d){
@@ -151,8 +152,15 @@
     document.getElementById('range-current').textContent=`$${fmt(price)}・高於52週低點 ${rp.toFixed(1)}%`;
     document.getElementById('upside-pct').textContent=`↑ ${((AVG_TARGET/price-1)*100).toFixed(1)}% 潛在漲幅`;
   }
+  async function loadMetrics(){
+    try{const r=await fetch('data.json');const d=(await r.json())?.stocks?.AVGO;if(!d)return;
+    document.querySelectorAll('[data-yf]').forEach(el=>{const f=el.getAttribute('data-yf');if(d[f]!=null)el.textContent=d[f];});
+    if(d.low52){LOW52=d.low52;document.getElementById('low52').textContent='低 $'+d.low52.toFixed(2);}
+    if(d.high52){HIGH52=d.high52;document.getElementById('high52').textContent='高 $'+d.high52.toFixed(2);}
+    if(d.avgTarget)AVG_TARGET=d.avgTarget;}catch(e){}
+  }
   async function loadAll(){document.getElementById('refresh-icon').className='spin';try{render(await fetchPrice());}catch(e){render(null);}document.getElementById('refresh-icon').className='';}
-  loadAll();setInterval(loadAll,60000);
+  loadMetrics();loadAll();setInterval(loadAll,60000);
 </script>
 </body>
 </html>
