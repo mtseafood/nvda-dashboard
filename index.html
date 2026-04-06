@@ -531,20 +531,24 @@
 
   // ── Pull-to-refresh ─────────────────────────────────────────────────────────
   const ptrEl = document.getElementById('ptr');
-  let ptrStartY = 0;
+  let ptrStartY = 0, ptrTriggered = false;
   document.addEventListener('touchstart', e => {
-    ptrStartY = window.scrollY === 0 ? e.touches[0].clientY : 0;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+    ptrStartY = scrollTop <= 10 ? e.touches[0].clientY : 0;
+    ptrTriggered = false;
   }, { passive: true });
   document.addEventListener('touchmove', e => {
     if (!ptrStartY) return;
-    ptrEl.classList.toggle('show', e.touches[0].clientY - ptrStartY > 55);
+    const dy = e.touches[0].clientY - ptrStartY;
+    ptrTriggered = dy > 40;
+    ptrEl.classList.toggle('show', ptrTriggered);
   }, { passive: true });
   document.addEventListener('touchend', () => {
-    if (ptrEl.classList.contains('show')) {
+    if (ptrTriggered) {
       ptrEl.textContent = '↻ 更新中...';
       loadAll().then(() => { ptrEl.textContent = '↓ 放開以重新整理'; ptrEl.classList.remove('show'); });
     }
-    ptrStartY = 0;
+    ptrStartY = 0; ptrTriggered = false;
   }, { passive: true });
 
   // ── Add to Home Screen (iOS) ────────────────────────────────────────────────
