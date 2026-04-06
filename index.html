@@ -13,6 +13,7 @@
   :root {
     --bg: #f5f5f7;
     --surface: #ffffff;
+    --surface2: #f5f5f7;
     --text: #1d1d1f;
     --muted: #86868b;
     --border: #d2d2d7;
@@ -24,6 +25,7 @@
     :root {
       --bg: #000000;
       --surface: #1c1c1e;
+      --surface2: #2c2c2e;
       --text: #f5f5f7;
       --muted: #86868b;
       --border: #3a3a3c;
@@ -40,17 +42,70 @@
     max-width: 540px;
     margin: 0 auto;
   }
-  h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+
+  /* ── Pull-to-refresh ── */
+  #ptr {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.2s;
+    margin-top: -8px;
+  }
+  #ptr.show { height: 32px; line-height: 32px; }
+
+  /* ── Header ── */
+  .header-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 6px;
   }
-  .subtitle {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 28px;
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .market-badge {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 500;
+    flex-shrink: 0;
   }
+  .badge-open   { background: rgba(26,127,75,0.12);   color: var(--up); }
+  .badge-pre    { background: rgba(245,158,11,0.12);  color: #b45309; }
+  .badge-after  { background: rgba(245,158,11,0.12);  color: #b45309; }
+  .badge-closed { background: rgba(134,134,139,0.12); color: var(--muted); }
+  @media (prefers-color-scheme: dark) {
+    .badge-open  { background: rgba(26,127,75,0.2); }
+    .badge-pre   { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .badge-after { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  }
+  .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+  /* ── Sort controls ── */
+  .controls { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .seg-ctrl {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .seg {
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    padding: 5px 12px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .seg + .seg { border-left: 1px solid var(--border); }
+  .seg.active { background: var(--text); color: var(--bg); }
+
+  /* ── Stock cards ── */
   .card {
     display: flex;
     align-items: center;
@@ -58,19 +113,12 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 16px 18px;
+    padding: 14px 16px;
     margin-bottom: 8px;
     box-shadow: var(--shadow);
     transition: opacity 0.15s;
   }
   .card:active { opacity: 0.7; }
-  .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-right: 14px;
-    display: none;
-  }
   .co-logo {
     width: 40px; height: 40px;
     border-radius: 10px;
@@ -79,30 +127,38 @@
     background: #fff;
     border: 1px solid var(--border);
     flex-shrink: 0;
-    margin-right: 14px;
+    margin-right: 12px;
   }
-  @media (prefers-color-scheme: dark) {
-    .co-logo { background: #2c2c2e; }
-  }
+  @media (prefers-color-scheme: dark) { .co-logo { background: #2c2c2e; } }
   .card-left { flex: 1; min-width: 0; }
   .ticker {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text);
     font-family: 'DM Mono', monospace;
     letter-spacing: 0.02em;
   }
   .company {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--muted);
     margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  /* ── Sparkline ── */
+  .spark {
+    width: 52px;
+    height: 28px;
+    flex-shrink: 0;
+    margin: 0 8px;
+  }
+
+  /* ── Card right (price + change + 52w) ── */
   .card-right { text-align: right; flex-shrink: 0; }
   .price {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
     font-family: 'DM Mono', monospace;
     color: var(--text);
@@ -111,10 +167,108 @@
     font-size: 12px;
     font-family: 'DM Mono', monospace;
     margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
   }
   .up { color: var(--up); }
   .down { color: var(--down); }
   .neutral { color: var(--muted); }
+
+  /* ── Move badge (±3%) ── */
+  .move-badge {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  .mbadge-up { background: rgba(26,127,75,0.12);  color: var(--up); }
+  .mbadge-dn { background: rgba(192,57,43,0.12);  color: var(--down); }
+  @media (prefers-color-scheme: dark) {
+    .mbadge-up { background: rgba(26,127,75,0.2); }
+    .mbadge-dn { background: rgba(192,57,43,0.2); }
+  }
+
+  /* ── 52w mini range ── */
+  .mini-range {
+    width: 60px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    position: relative;
+    margin-top: 6px;
+    margin-left: auto;
+  }
+  .mini-dot {
+    position: absolute;
+    top: -2.5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+    transform: translateX(-50%);
+  }
+  .mini-pct {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-top: 3px;
+    text-align: right;
+  }
+
+  /* ── Skeleton shimmer ── */
+  .skel {
+    background: linear-gradient(90deg, var(--border) 25%, var(--surface2) 50%, var(--border) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.3s ease-in-out infinite;
+    border-radius: 4px;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+
+  /* ── Portfolio card ── */
+  .port-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+  .port-right { text-align: right; flex-shrink: 0; }
+  .port-value { font-size: 15px; font-weight: 500; font-family: 'DM Mono', monospace; }
+  .port-pnl   { font-size: 12px; font-family: 'DM Mono', monospace; margin-top: 2px; }
+
+  /* ── A2HS banner ── */
+  .a2hs-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 8px;
+    box-shadow: var(--shadow);
+  }
+  .a2hs-icon { font-size: 24px; flex-shrink: 0; }
+  .a2hs-text { flex: 1; }
+  .a2hs-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .a2hs-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .a2hs-close {
+    background: none; border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 8px;
+    font-size: 12px; color: var(--muted); cursor: pointer;
+    flex-shrink: 0;
+  }
+
   .footer {
     text-align: center;
     font-size: 11px;
@@ -126,202 +280,287 @@
 </head>
 <body>
 
-<h1>自選股</h1>
+<div id="ptr">↓ 放開以重新整理</div>
+
+<div class="header-row">
+  <h1>自選股</h1>
+  <span class="market-badge badge-closed" id="market-badge">—</span>
+</div>
 <p class="subtitle">即時報價・點擊查看詳細分析</p>
 
-<a class="card" href="nvda.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=nvidia.com&sz=128" alt="NVDA" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#6366f1"></div>
-  <div class="card-left">
-    <div class="ticker">NVDA</div>
-    <div class="company">輝達公司・半導體 AI</div>
+<div class="controls">
+  <div class="seg-ctrl">
+    <button class="seg active" id="seg-default" onclick="setSort('default')">預設</button>
+    <button class="seg" id="seg-gain"    onclick="setSort('gain')">漲幅↑</button>
+    <button class="seg" id="seg-loss"    onclick="setSort('loss')">跌幅↑</button>
   </div>
-  <div class="card-right">
-    <div class="price" id="price-NVDA">—</div>
-    <div class="change" id="change-NVDA"><span class="neutral">載入中</span></div>
-  </div>
-</a>
+</div>
 
-<a class="card" href="tsla.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=tesla.com&sz=128" alt="TSLA" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#3b82f6"></div>
-  <div class="card-left">
-    <div class="ticker">TSLA</div>
-    <div class="company">特斯拉公司・電動車</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-TSLA">—</div>
-    <div class="change" id="change-TSLA"><span class="neutral">載入中</span></div>
-  </div>
-</a>
+<div id="stocks-list"></div>
 
-<a class="card" href="amd.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=amd.com&sz=128" alt="AMD" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#ef4444"></div>
+<a class="card" href="portfolio.html" style="margin-top:8px;">
+  <div class="port-icon">📊</div>
   <div class="card-left">
-    <div class="ticker">AMD</div>
-    <div class="company">超微半導體・處理器/顯示卡</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-AMD">—</div>
-    <div class="change" id="change-AMD"><span class="neutral">載入中</span></div>
-  </div>
-</a>
-
-<a class="card" href="mu.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=micron.com&sz=128" alt="MU" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#f59e0b"></div>
-  <div class="card-left">
-    <div class="ticker">MU</div>
-    <div class="company">美光科技・記憶體</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-MU">—</div>
-    <div class="change" id="change-MU"><span class="neutral">載入中</span></div>
-  </div>
-</a>
-
-<a class="card" href="avgo.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=broadcom.com&sz=128" alt="AVGO" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#8b5cf6"></div>
-  <div class="card-left">
-    <div class="ticker">AVGO</div>
-    <div class="company">博通公司・網路晶片</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-AVGO">—</div>
-    <div class="change" id="change-AVGO"><span class="neutral">載入中</span></div>
-  </div>
-</a>
-
-<a class="card" href="mrvl.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=marvell.com&sz=128" alt="MRVL" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#10b981"></div>
-  <div class="card-left">
-    <div class="ticker">MRVL</div>
-    <div class="company">邁威爾科技・資料基礎設施</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-MRVL">—</div>
-    <div class="change" id="change-MRVL"><span class="neutral">載入中</span></div>
-  </div>
-</a>
-
-<a class="card" href="aapl.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=apple.com&sz=128" alt="AAPL" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#374151"></div>
-  <div class="card-left">
-    <div class="ticker">AAPL</div>
-    <div class="company">蘋果公司・消費電子</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-AAPL">—</div>
-    <div class="change" id="change-AAPL"><span class="neutral">載入中</span></div>
-  </div>
-</a>
-
-<a class="card" href="msft.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=128" alt="MSFT" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#0078d4"></div>
-  <div class="card-left">
-    <div class="ticker">MSFT</div>
-    <div class="company">微軟公司・雲端軟體</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-MSFT">—</div>
-    <div class="change" id="change-MSFT"><span class="neutral">載入中</span></div>
-  </div>
-</a>
-
-<a class="card" href="lite.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=lumentum.com&sz=128" alt="LITE" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#06b6d4"></div>
-  <div class="card-left">
-    <div class="ticker">LITE</div>
-    <div class="company">朗美通控股・光學元件</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-LITE">—</div>
-    <div class="change" id="change-LITE"><span class="neutral">載入中</span></div>
-  </div>
-</a>
-
-<a class="card" href="sndk.html">
-  <img class="co-logo" src="https://www.google.com/s2/favicons?domain=sandisk.com&sz=128" alt="SNDK" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-  <div class="dot" style="background:#f97316"></div>
-  <div class="card-left">
-    <div class="ticker">SNDK</div>
-    <div class="company">閃迪公司・NAND 快閃記憶體</div>
-  </div>
-  <div class="card-right">
-    <div class="price" id="price-SNDK">—</div>
-    <div class="change" id="change-SNDK"><span class="neutral">載入中</span></div>
-  </div>
-</a>
-
-<a class="card" href="portfolio.html" style="margin-top:16px;">
-  <div style="width:40px;height:40px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;margin-right:14px;">📊</div>
-  <div class="card-left">
-    <div class="ticker" style="font-size:15px;">投資組合</div>
+    <div class="ticker" style="font-size:14px;">投資組合</div>
     <div class="company">記錄持倉・追蹤損益・年化報酬</div>
   </div>
-  <div class="card-right" style="font-size:18px;color:var(--muted);">›</div>
+  <div class="port-right" id="port-right">
+    <div style="font-size:18px;color:var(--muted);">›</div>
+  </div>
 </a>
+
+<div id="a2hs" class="a2hs-card" style="display:none;">
+  <div class="a2hs-icon">📱</div>
+  <div class="a2hs-text">
+    <div class="a2hs-title">加入主畫面</div>
+    <div class="a2hs-desc">點擊 Safari 底部 <strong>⬆</strong>，再選「加入主畫面」，即可像 App 使用</div>
+  </div>
+  <button class="a2hs-close" onclick="dismissA2HS()">✕</button>
+</div>
 
 <div class="footer" id="footer">正在獲取即時報價...</div>
 
 <script>
-  const tickers = ['NVDA','TSLA','AMD','MU','AVGO','MRVL','AAPL','MSFT','LITE','SNDK'];
+  // ── Stock metadata ──────────────────────────────────────────────────────────
+  const STOCKS = [
+    { sym:'NVDA', name:'輝達公司・半導體 AI',   domain:'nvidia.com',    href:'nvda.html' },
+    { sym:'TSLA', name:'特斯拉公司・電動車',     domain:'tesla.com',     href:'tsla.html' },
+    { sym:'AMD',  name:'超微半導體・處理器/GPU', domain:'amd.com',       href:'amd.html'  },
+    { sym:'MU',   name:'美光科技・記憶體',       domain:'micron.com',    href:'mu.html'   },
+    { sym:'AVGO', name:'博通公司・網路晶片',     domain:'broadcom.com',  href:'avgo.html' },
+    { sym:'MRVL', name:'邁威爾科技・資料基礎設施', domain:'marvell.com', href:'mrvl.html' },
+    { sym:'AAPL', name:'蘋果公司・消費電子',     domain:'apple.com',     href:'aapl.html' },
+    { sym:'MSFT', name:'微軟公司・雲端軟體',     domain:'microsoft.com', href:'msft.html' },
+    { sym:'LITE', name:'朗美通控股・光學元件',   domain:'lumentum.com',  href:'lite.html' },
+    { sym:'SNDK', name:'閃迪公司・NAND 快閃記憶體', domain:'sandisk.com',href:'sndk.html' },
+  ];
 
-  function fmt(n) {
-    return '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  let priceData = {};  // sym → { price, prevClose, closes, change, pct, isUp }
+  let rangeData = {};  // sym → { low52, high52 }
+  let sortMode = 'default';
+
+  // ── Market status ───────────────────────────────────────────────────────────
+  function getMarketStatus() {
+    const now = new Date();
+    const utcMs = now.getTime();
+    const year = now.getUTCFullYear();
+    const mar1Day = new Date(Date.UTC(year, 2, 1)).getUTCDay();
+    const dstStartUTC = Date.UTC(year, 2, 1 + (7 - mar1Day) % 7 + 7, 7, 0, 0);
+    const nov1Day = new Date(Date.UTC(year, 10, 1)).getUTCDay();
+    const dstEndUTC   = Date.UTC(year, 10, 1 + (7 - nov1Day) % 7, 6, 0, 0);
+    const isDST = utcMs >= dstStartUTC && utcMs < dstEndUTC;
+    const et = new Date(utcMs + (isDST ? -4 : -5) * 3600000);
+    const day = et.getUTCDay();
+    const min = et.getUTCHours() * 60 + et.getUTCMinutes();
+    if (day === 0 || day === 6)   return { key:'closed', label:'週末休市' };
+    if (min < 240)                return { key:'closed', label:'休市中' };
+    if (min < 570)                return { key:'pre',    label:'盤前交易' };
+    if (min < 960)                return { key:'open',   label:'美股開盤' };
+    if (min < 1200)               return { key:'after',  label:'盤後交易' };
+    return { key:'closed', label:'休市中' };
   }
 
+  function updateMarketBadge() {
+    const { key, label } = getMarketStatus();
+    const el = document.getElementById('market-badge');
+    el.textContent = label;
+    el.className = `market-badge badge-${key}`;
+  }
+  updateMarketBadge();
+
+  // ── Formatters ──────────────────────────────────────────────────────────────
+  function fmt(n) {
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  }
+
+  // ── Sparkline SVG builder ───────────────────────────────────────────────────
+  function buildSparkSVG(closes, isUp) {
+    const valid = (closes || []).filter(v => v != null && isFinite(v));
+    if (valid.length < 2) return '';
+    const W = 52, H = 28, pad = 2;
+    const min = Math.min(...valid), max = Math.max(...valid);
+    const range = max - min || 1;
+    const xs = valid.map((_, i) => pad + (i / (valid.length - 1)) * (W - pad * 2));
+    const ys = valid.map(v => H - pad - ((v - min) / range) * (H - pad * 2));
+    const pts = xs.map((x, i) => `${x.toFixed(1)},${ys[i].toFixed(1)}`).join(' ');
+    const color = isUp ? '#1a7f4b' : '#c0392b';
+    const fill = `${xs[0].toFixed(1)},${H} ${pts} ${xs[xs.length-1].toFixed(1)},${H}`;
+    return `<polygon points="${fill}" fill="${color}" opacity="0.1"/>` +
+           `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
+
+  // ── Render cards ────────────────────────────────────────────────────────────
+  function renderCards() {
+    let list = [...STOCKS];
+    if (sortMode === 'gain') list.sort((a, b) => (priceData[b.sym]?.pct ?? -999) - (priceData[a.sym]?.pct ?? -999));
+    if (sortMode === 'loss') list.sort((a, b) => (priceData[a.sym]?.pct ?? 999)  - (priceData[b.sym]?.pct ?? 999));
+
+    document.getElementById('stocks-list').innerHTML = list.map(s => {
+      const d = priceData[s.sym];
+      const r = rangeData[s.sym];
+
+      // Skeleton card while loading
+      if (!d) {
+        return `<div class="card" style="pointer-events:none;gap:12px;">
+          <div class="co-logo skel"></div>
+          <div class="card-left" style="display:flex;flex-direction:column;gap:6px;">
+            <div class="skel" style="width:44px;height:14px;"></div>
+            <div class="skel" style="width:90px;height:11px;"></div>
+          </div>
+          <div class="spark"></div>
+          <div class="card-right" style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+            <div class="skel" style="width:60px;height:14px;"></div>
+            <div class="skel" style="width:40px;height:11px;"></div>
+          </div>
+        </div>`;
+      }
+
+      const { price, closes, pct, isUp } = d;
+      const cls  = isUp ? 'up' : 'down';
+      const sign = isUp ? '+' : '';
+      const bigMove = Math.abs(pct) >= 3;
+      const badgeHtml = bigMove
+        ? `<span class="move-badge ${isUp ? 'mbadge-up' : 'mbadge-dn'}">${isUp ? '▲急漲' : '▼急跌'}</span>`
+        : '';
+
+      let rangeHtml = '';
+      if (r) {
+        const rp  = Math.min(100, Math.max(0, (price - r.low52) / (r.high52 - r.low52) * 100));
+        const col = isUp ? 'var(--up)' : 'var(--down)';
+        rangeHtml = `<div class="mini-range"><div class="mini-dot" style="left:${rp.toFixed(1)}%;background:${col}"></div></div>` +
+                    `<div class="mini-pct">52w ${rp.toFixed(0)}%</div>`;
+      }
+
+      return `<a class="card" href="${s.href}">
+        <img class="co-logo" src="https://www.google.com/s2/favicons?domain=${s.domain}&sz=128" alt="${s.sym}" onerror="this.style.display='none'">
+        <div class="card-left">
+          <div class="ticker">${s.sym}</div>
+          <div class="company">${s.name}</div>
+        </div>
+        <svg class="spark" viewBox="0 0 52 28" preserveAspectRatio="none">${buildSparkSVG(closes, isUp)}</svg>
+        <div class="card-right">
+          <div class="price">${fmt(price)}</div>
+          <div class="change"><span class="${cls}">${sign}${pct.toFixed(2)}%</span>${badgeHtml}</div>
+          ${rangeHtml}
+        </div>
+      </a>`;
+    }).join('');
+  }
+
+  // ── Sort control ────────────────────────────────────────────────────────────
+  function setSort(mode) {
+    sortMode = mode;
+    ['default','gain','loss'].forEach(m => document.getElementById('seg-' + m).classList.toggle('active', m === mode));
+    renderCards();
+  }
+
+  // ── Fetch price + 5-day closes ──────────────────────────────────────────────
   async function fetchPrice(symbol) {
-    const yf = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
+    const yf = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d`;
     const urls = [
       'https://corsproxy.io/?' + yf,
-      `https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`,
+      `https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d`,
       'https://api.allorigins.win/raw?url=' + encodeURIComponent(yf)
     ];
     for (const url of urls) {
       try {
-        const res = await fetch(url);
-        if (!res.ok) continue;
+        const res = await fetch(url); if (!res.ok) continue;
         const data = await res.json();
-        const meta = data?.chart?.result?.[0]?.meta;
+        const result = data?.chart?.result?.[0];
+        const meta = result?.meta;
         if (!meta?.regularMarketPrice) continue;
-        return { price: meta.regularMarketPrice, prevClose: meta.previousClose || meta.chartPreviousClose };
+        const closes = result?.indicators?.quote?.[0]?.close || [];
+        const price = meta.regularMarketPrice;
+        const prevClose = meta.previousClose || meta.chartPreviousClose || price;
+        const change = price - prevClose;
+        const pct = (change / prevClose) * 100;
+        return { price, prevClose, closes, change, pct, isUp: change >= 0 };
       } catch(e) { continue; }
     }
     return null;
   }
 
-  async function loadAll() {
-    const results = await Promise.all(tickers.map(fetchPrice));
-    results.forEach((d, i) => {
-      const sym = tickers[i];
-      const priceEl = document.getElementById('price-' + sym);
-      const changeEl = document.getElementById('change-' + sym);
-      if (!d) {
-        priceEl.textContent = '—';
-        changeEl.innerHTML = '<span class="neutral">—</span>';
-        return;
+  // ── Fetch 52w ranges from data.json ────────────────────────────────────────
+  async function loadRanges() {
+    try {
+      const d = await (await fetch('data.json')).json();
+      for (const [sym, info] of Object.entries(d.stocks || {})) {
+        if (info.low52 != null && info.high52 != null)
+          rangeData[sym] = { low52: info.low52, high52: info.high52 };
       }
-      const change = d.price - d.prevClose;
-      const pct = (change / d.prevClose) * 100;
-      const cls = change >= 0 ? 'up' : 'down';
-      const sign = change >= 0 ? '+' : '';
-      priceEl.textContent = fmt(d.price);
-      changeEl.innerHTML = `<span class="${cls}">${sign}${pct.toFixed(2)}%</span>`;
-    });
-    const now = new Date();
-    document.getElementById('footer').textContent =
-      '更新於 ' + now.toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'}) +
-      '・' + now.toLocaleDateString('zh-TW', {month:'long', day:'numeric'});
+    } catch(e) {}
   }
 
-  loadAll();
+  // ── Portfolio summary ───────────────────────────────────────────────────────
+  function updatePortfolioCard() {
+    try {
+      const data = JSON.parse(localStorage.getItem('portfolio') || '[]');
+      if (!data.length) return;
+      let totalCost = 0, totalValue = 0;
+      for (const p of data) {
+        const d = priceData[p.symbol];
+        if (!d) continue;
+        totalCost  += p.buyPrice * p.shares;
+        totalValue += d.price * p.shares;
+      }
+      if (totalCost === 0) return;
+      const pnl  = totalValue - totalCost;
+      const pct  = (pnl / totalCost) * 100;
+      const cls  = pnl >= 0 ? 'up' : 'down';
+      const sign = pnl >= 0 ? '+' : '-';
+      document.getElementById('port-right').innerHTML =
+        `<div class="port-value">${fmt(totalValue)}</div>` +
+        `<div class="port-pnl ${cls}">${sign}${fmt(Math.abs(pnl))} (${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%)</div>`;
+    } catch(e) {}
+  }
+
+  // ── Main load ───────────────────────────────────────────────────────────────
+  async function loadAll() {
+    const results = await Promise.all(STOCKS.map(s => fetchPrice(s.sym)));
+    results.forEach((d, i) => {
+      if (d) priceData[STOCKS[i].sym] = d;
+    });
+    renderCards();
+    const now = new Date();
+    document.getElementById('footer').textContent =
+      '更新於 ' + now.toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit' }) +
+      '・' + now.toLocaleDateString('zh-TW', { month:'long', day:'numeric' });
+    updateMarketBadge();
+    updatePortfolioCard();
+  }
+
+  // ── Pull-to-refresh ─────────────────────────────────────────────────────────
+  const ptrEl = document.getElementById('ptr');
+  let ptrStartY = 0;
+  document.addEventListener('touchstart', e => {
+    ptrStartY = window.scrollY === 0 ? e.touches[0].clientY : 0;
+  }, { passive: true });
+  document.addEventListener('touchmove', e => {
+    if (!ptrStartY) return;
+    ptrEl.classList.toggle('show', e.touches[0].clientY - ptrStartY > 55);
+  }, { passive: true });
+  document.addEventListener('touchend', () => {
+    if (ptrEl.classList.contains('show')) {
+      ptrEl.textContent = '↻ 更新中...';
+      loadAll().then(() => { ptrEl.textContent = '↓ 放開以重新整理'; ptrEl.classList.remove('show'); });
+    }
+    ptrStartY = 0;
+  }, { passive: true });
+
+  // ── Add to Home Screen (iOS) ────────────────────────────────────────────────
+  function dismissA2HS() {
+    localStorage.setItem('a2hs-ok', '1');
+    document.getElementById('a2hs').style.display = 'none';
+  }
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (isIOS && !window.navigator.standalone && !localStorage.getItem('a2hs-ok')) {
+    document.getElementById('a2hs').style.display = '';
+  }
+
+  // ── Init ────────────────────────────────────────────────────────────────────
+  renderCards();          // show skeletons immediately
+  loadRanges();           // fetch 52w data (non-blocking)
+  loadAll();              // fetch prices → re-render real cards
   setInterval(loadAll, 60000);
 </script>
 </body>
