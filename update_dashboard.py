@@ -9,7 +9,7 @@ import json
 import yfinance as yf
 from datetime import datetime, timezone, timedelta
 
-STOCKS = ["NVDA", "TSLA", "AMD", "MU", "AVGO", "MRVL"]
+STOCKS = ["NVDA", "TSLA", "AMD", "MU", "AVGO", "MRVL", "AAPL", "MSFT", "LITE", "SNDK"]
 TW = timezone(timedelta(hours=8))
 
 
