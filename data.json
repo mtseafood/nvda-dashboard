@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-05 20:49 TWN",
+  "updated": "2026-04-06 09:35 TWN",
   "stocks": {
     "NVDA": {
       "marketCap": "$4.31T",
@@ -26,10 +26,10 @@
       "beta": "1.92",
       "debtEquity": "17.8%",
       "dividendYield": "—",
-      "targetPrice": "$417.08",
+      "targetPrice": "$416.15",
       "low52": 214.25,
       "high52": 498.83,
-      "avgTarget": 417.08
+      "avgTarget": 416.15
     },
     "AMD": {
       "marketCap": "$354.6B",
@@ -86,10 +86,10 @@
       "beta": "1.82",
       "debtEquity": "33.5%",
       "dividendYield": "22.0%",
-      "targetPrice": "$120.88",
+      "targetPrice": "$121.25",
       "low52": 47.09,
       "high52": 107.84,
-      "avgTarget": 120.88
+      "avgTarget": 121.25
     }
   }
 }
