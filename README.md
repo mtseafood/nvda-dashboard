@@ -2,7 +2,7 @@
 
 A self-updating stock dashboard for **NVIDIA (NVDA)** published on GitHub Pages.
 
-🔗 **Live site:** `https://YOUR_USERNAME.github.io/nvda-dashboard`
+🔗 **Live site:** https://carterlin.github.io/nvda-dashboard
 
 ---
 
