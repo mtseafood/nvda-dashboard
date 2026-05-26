@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-25 09:44 TWN",
+  "updated": "2026-05-26 09:39 TWN",
   "stocks": {
     "NVDA": {
       "marketCap": "$5.22T",
@@ -11,10 +11,10 @@
       "beta": "2.24",
       "debtEquity": "6.6%",
       "dividendYield": "2.0%",
-      "targetPrice": "$294.22",
+      "targetPrice": "$295.34",
       "low52": 132.92,
       "high52": 236.54,
-      "avgTarget": 294.22
+      "avgTarget": 295.34
     },
     "TSLA": {
       "marketCap": "$1.60T",
