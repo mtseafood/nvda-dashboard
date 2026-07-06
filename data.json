@@ -1,14 +1,14 @@
 {
-  "updated": "2026-07-03 12:39 TWN",
+  "updated": "2026-07-06 13:07 TWN",
   "stocks": {
     "NVDA": {
       "marketCap": "$4.72T",
-      "trailingPE": "29.9x",
+      "trailingPE": "29.8x",
       "forwardPE": "15.3x",
-      "eps": "$6.52",
+      "eps": "$6.53",
       "grossMargin": "74.1%",
       "revenue": "$253.5B",
-      "beta": "2.20",
+      "beta": "2.21",
       "debtEquity": "6.6%",
       "dividendYield": "51.0%",
       "targetPrice": "$301.62",
@@ -18,18 +18,18 @@
     },
     "TSLA": {
       "marketCap": "$1.48T",
-      "trailingPE": "354.5x",
+      "trailingPE": "357.7x",
       "forwardPE": "154.5x",
-      "eps": "$1.11",
+      "eps": "$1.10",
       "grossMargin": "19.1%",
       "revenue": "$97.9B",
       "beta": "1.80",
       "debtEquity": "18.7%",
       "dividendYield": "—",
-      "targetPrice": "$421.16",
+      "targetPrice": "$423.40",
       "low52": 288.77,
       "high52": 498.83,
-      "avgTarget": 421.16
+      "avgTarget": 423.4
     },
     "AMD": {
       "marketCap": "$844.4B",
@@ -38,7 +38,7 @@
       "eps": "$3.00",
       "grossMargin": "53.1%",
       "revenue": "$37.5B",
-      "beta": "2.49",
+      "beta": "2.47",
       "debtEquity": "6.0%",
       "dividendYield": "—",
       "targetPrice": "$508.31",
@@ -68,7 +68,7 @@
       "eps": "$6.02",
       "grossMargin": "76.3%",
       "revenue": "$75.5B",
-      "beta": "1.43",
+      "beta": "1.46",
       "debtEquity": "74.0%",
       "dividendYield": "72.0%",
       "targetPrice": "$523.73",
@@ -83,7 +83,7 @@
       "eps": "$2.92",
       "grossMargin": "51.5%",
       "revenue": "$8.7B",
-      "beta": "2.28",
+      "beta": "2.20",
       "debtEquity": "29.0%",
       "dividendYield": "10.0%",
       "targetPrice": "$249.33",
@@ -98,7 +98,7 @@
       "eps": "$8.27",
       "grossMargin": "47.9%",
       "revenue": "$451.4B",
-      "beta": "1.09",
+      "beta": "1.10",
       "debtEquity": "79.5%",
       "dividendYield": "35.0%",
       "targetPrice": "$315.09",
@@ -113,7 +113,7 @@
       "eps": "$16.79",
       "grossMargin": "68.3%",
       "revenue": "$318.3B",
-      "beta": "1.10",
+      "beta": "1.13",
       "debtEquity": "30.3%",
       "dividendYield": "93.0%",
       "targetPrice": "$561.11",
@@ -139,17 +139,17 @@
     "SNDK": {
       "marketCap": "$258.4B",
       "trailingPE": "59.5x",
-      "forwardPE": "9.3x",
+      "forwardPE": "8.6x",
       "eps": "$29.32",
       "grossMargin": "56.0%",
       "revenue": "$13.2B",
       "beta": "—",
       "debtEquity": "1.5%",
       "dividendYield": "—",
-      "targetPrice": "$1,863.82",
+      "targetPrice": "$1,930.50",
       "low52": 40.1,
       "high52": 2354.39,
-      "avgTarget": 1863.82
+      "avgTarget": 1930.5
     }
   }
 }
