@@ -1,11 +1,11 @@
 {
-  "updated": "2026-08-24 10:20 TWN",
+  "updated": "2026-08-25 10:15 TWN",
   "stocks": {
     "NVDA": {
-      "marketCap": "$5.20T",
+      "marketCap": "$5.05T",
       "trailingPE": "32.9x",
-      "forwardPE": "16.5x",
-      "eps": "$6.53",
+      "forwardPE": "16.0x",
+      "eps": "$6.34",
       "grossMargin": "74.1%",
       "revenue": "$253.5B",
       "beta": "2.21",
@@ -17,10 +17,10 @@
       "avgTarget": 304.73
     },
     "TSLA": {
-      "marketCap": "$1.43T",
-      "trailingPE": "332.9x",
-      "forwardPE": "168.1x",
-      "eps": "$1.09",
+      "marketCap": "$1.38T",
+      "trailingPE": "332.3x",
+      "forwardPE": "161.7x",
+      "eps": "$1.05",
       "grossMargin": "18.9%",
       "revenue": "$103.6B",
       "beta": "1.83",
@@ -32,10 +32,10 @@
       "avgTarget": 390.09
     },
     "AMD": {
-      "marketCap": "$772.6B",
-      "trailingPE": "120.4x",
-      "forwardPE": "30.6x",
-      "eps": "$3.93",
+      "marketCap": "$745.6B",
+      "trailingPE": "120.5x",
+      "forwardPE": "29.5x",
+      "eps": "$3.79",
       "grossMargin": "55.7%",
       "revenue": "$41.3B",
       "beta": "2.49",
@@ -47,9 +47,9 @@
       "avgTarget": 613.09
     },
     "MU": {
-      "marketCap": "$1.09T",
-      "trailingPE": "21.8x",
-      "forwardPE": "6.2x",
+      "marketCap": "—",
+      "trailingPE": "20.6x",
+      "forwardPE": "5.9x",
       "eps": "$44.28",
       "grossMargin": "72.6%",
       "revenue": "$90.3B",
@@ -62,10 +62,10 @@
       "avgTarget": 1515.11
     },
     "AVGO": {
-      "marketCap": "$1.75T",
+      "marketCap": "$1.71T",
       "trailingPE": "61.3x",
-      "forwardPE": "18.9x",
-      "eps": "$6.01",
+      "forwardPE": "18.4x",
+      "eps": "$5.85",
       "grossMargin": "76.3%",
       "revenue": "$75.5B",
       "beta": "1.47",
@@ -77,25 +77,25 @@
       "avgTarget": 526.3
     },
     "MRVL": {
-      "marketCap": "$212.8B",
-      "trailingPE": "81.2x",
-      "forwardPE": "38.0x",
+      "marketCap": "$206.1B",
+      "trailingPE": "78.5x",
+      "forwardPE": "36.7x",
       "eps": "$2.92",
       "grossMargin": "51.5%",
       "revenue": "$8.7B",
       "beta": "2.25",
       "debtEquity": "29.0%",
       "dividendYield": "10.0%",
-      "targetPrice": "$263.94",
+      "targetPrice": "$266.36",
       "low52": 61.44,
       "high52": 329.88,
-      "avgTarget": 263.94
+      "avgTarget": 266.36
     },
     "AAPL": {
-      "marketCap": "$4.51T",
+      "marketCap": "$4.53T",
       "trailingPE": "35.5x",
-      "forwardPE": "32.4x",
-      "eps": "$8.72",
+      "forwardPE": "32.5x",
+      "eps": "$8.75",
       "grossMargin": "48.7%",
       "revenue": "$466.8B",
       "beta": "1.09",
@@ -107,10 +107,10 @@
       "avgTarget": 324.45
     },
     "MSFT": {
-      "marketCap": "$3.59T",
+      "marketCap": "$3.62T",
       "trailingPE": "27.0x",
-      "forwardPE": "20.5x",
-      "eps": "$17.93",
+      "forwardPE": "20.7x",
+      "eps": "$18.08",
       "grossMargin": "67.9%",
       "revenue": "$331.8B",
       "beta": "1.10",
@@ -122,24 +122,24 @@
       "avgTarget": 569.45
     },
     "LITE": {
-      "marketCap": "$77.7B",
+      "marketCap": "$74.5B",
       "trailingPE": "虧損",
-      "forwardPE": "26.3x",
-      "eps": "-$93.00",
+      "forwardPE": "25.1x",
+      "eps": "-$89.08",
       "grossMargin": "44.2%",
       "revenue": "$3.0B",
       "beta": "1.51",
       "debtEquity": "36.0%",
       "dividendYield": "—",
       "targetPrice": "$1,148.30",
-      "low52": 119.25,
+      "low52": 123.5,
       "high52": 1085.68,
       "avgTarget": 1148.3
     },
     "SNDK": {
-      "marketCap": "$233.7B",
-      "trailingPE": "21.6x",
-      "forwardPE": "6.0x",
+      "marketCap": "$218.6B",
+      "trailingPE": "20.2x",
+      "forwardPE": "5.6x",
       "eps": "$73.74",
       "grossMargin": "71.5%",
       "revenue": "$20.2B",
@@ -147,7 +147,7 @@
       "debtEquity": "1.3%",
       "dividendYield": "—",
       "targetPrice": "$2,126.17",
-      "low52": 46.01,
+      "low52": 46.75,
       "high52": 2354.39,
       "avgTarget": 2126.17
     }
