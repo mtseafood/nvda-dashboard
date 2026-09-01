@@ -1,11 +1,11 @@
 {
-  "updated": "2026-08-31 14:36 TWN",
+  "updated": "2026-09-01 13:59 TWN",
   "stocks": {
     "NVDA": {
-      "marketCap": "$5.25T",
+      "marketCap": "$5.33T",
       "trailingPE": "27.5x",
-      "forwardPE": "14.2x",
-      "eps": "$7.92",
+      "forwardPE": "14.4x",
+      "eps": "$8.04",
       "grossMargin": "74.7%",
       "revenue": "$303.0B",
       "beta": "2.21",
@@ -17,10 +17,10 @@
       "avgTarget": 323.42
     },
     "TSLA": {
-      "marketCap": "$1.38T",
-      "trailingPE": "322.9x",
-      "forwardPE": "161.6x",
-      "eps": "$1.08",
+      "marketCap": "$1.45T",
+      "trailingPE": "322.8x",
+      "forwardPE": "170.5x",
+      "eps": "$1.14",
       "grossMargin": "18.9%",
       "revenue": "$103.6B",
       "beta": "1.83",
@@ -32,10 +32,10 @@
       "avgTarget": 390.09
     },
     "AMD": {
-      "marketCap": "$760.0B",
-      "trailingPE": "119.1x",
-      "forwardPE": "30.1x",
-      "eps": "$3.91",
+      "marketCap": "$768.4B",
+      "trailingPE": "119.2x",
+      "forwardPE": "30.5x",
+      "eps": "$3.95",
       "grossMargin": "55.7%",
       "revenue": "$41.3B",
       "beta": "2.49",
@@ -47,10 +47,10 @@
       "avgTarget": 613.84
     },
     "MU": {
-      "marketCap": "$1.05T",
+      "marketCap": "$1.08T",
       "trailingPE": "21.1x",
-      "forwardPE": "6.0x",
-      "eps": "$44.22",
+      "forwardPE": "6.2x",
+      "eps": "$45.44",
       "grossMargin": "72.6%",
       "revenue": "$90.3B",
       "beta": "2.21",
@@ -62,9 +62,9 @@
       "avgTarget": 1513.41
     },
     "AVGO": {
-      "marketCap": "$1.75T",
-      "trailingPE": "61.4x",
-      "forwardPE": "18.9x",
+      "marketCap": "$1.76T",
+      "trailingPE": "61.6x",
+      "forwardPE": "19.0x",
       "eps": "$6.01",
       "grossMargin": "76.3%",
       "revenue": "$75.5B",
@@ -77,10 +77,10 @@
       "avgTarget": 525.97
     },
     "MRVL": {
-      "marketCap": "$194.7B",
-      "trailingPE": "72.0x",
-      "forwardPE": "32.6x",
-      "eps": "$3.01",
+      "marketCap": "$190.2B",
+      "trailingPE": "69.9x",
+      "forwardPE": "31.8x",
+      "eps": "$3.03",
       "grossMargin": "52.2%",
       "revenue": "$9.5B",
       "beta": "2.25",
@@ -92,9 +92,9 @@
       "avgTarget": 278.89
     },
     "AAPL": {
-      "marketCap": "$4.67T",
-      "trailingPE": "36.6x",
-      "forwardPE": "33.5x",
+      "marketCap": "$4.62T",
+      "trailingPE": "36.3x",
+      "forwardPE": "33.2x",
       "eps": "$8.73",
       "grossMargin": "48.7%",
       "revenue": "$466.8B",
@@ -107,10 +107,10 @@
       "avgTarget": 324.45
     },
     "MSFT": {
-      "marketCap": "$3.81T",
+      "marketCap": "$3.77T",
       "trailingPE": "28.6x",
-      "forwardPE": "21.8x",
-      "eps": "$17.97",
+      "forwardPE": "21.5x",
+      "eps": "$17.76",
       "grossMargin": "67.9%",
       "revenue": "$331.8B",
       "beta": "1.10",
@@ -122,10 +122,10 @@
       "avgTarget": 569.45
     },
     "LITE": {
-      "marketCap": "$80.3B",
+      "marketCap": "$82.1B",
       "trailingPE": "虧損",
-      "forwardPE": "27.1x",
-      "eps": "-$92.99",
+      "forwardPE": "27.7x",
+      "eps": "-$95.04",
       "grossMargin": "44.2%",
       "revenue": "$3.0B",
       "beta": "1.51",
@@ -137,10 +137,10 @@
       "avgTarget": 1148.3
     },
     "SNDK": {
-      "marketCap": "$217.4B",
+      "marketCap": "$229.4B",
       "trailingPE": "20.1x",
-      "forwardPE": "5.6x",
-      "eps": "$73.80",
+      "forwardPE": "5.9x",
+      "eps": "$77.86",
       "grossMargin": "71.5%",
       "revenue": "$20.2B",
       "beta": "—",
