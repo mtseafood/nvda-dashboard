@@ -1,10 +1,10 @@
 {
-  "updated": "2026-09-07 13:38 TWN",
+  "updated": "2026-09-08 13:33 TWN",
   "stocks": {
     "NVDA": {
       "marketCap": "$5.56T",
       "trailingPE": "29.2x",
-      "forwardPE": "14.9x",
+      "forwardPE": "14.8x",
       "eps": "$7.90",
       "grossMargin": "74.7%",
       "revenue": "$303.0B",
@@ -34,7 +34,7 @@
     "AMD": {
       "marketCap": "$779.6B",
       "trailingPE": "121.8x",
-      "forwardPE": "30.9x",
+      "forwardPE": "30.8x",
       "eps": "$3.92",
       "grossMargin": "55.7%",
       "revenue": "$41.3B",
@@ -42,7 +42,7 @@
       "debtEquity": "6.4%",
       "dividendYield": "—",
       "targetPrice": "$613.84",
-      "low52": 149.22,
+      "low52": 149.85,
       "high52": 584.73,
       "avgTarget": 613.84
     },
@@ -57,7 +57,7 @@
       "debtEquity": "6.3%",
       "dividendYield": "5.0%",
       "targetPrice": "$1,513.11",
-      "low52": 128.4,
+      "low52": 131.56,
       "high52": 1255.0,
       "avgTarget": 1513.11
     },
@@ -87,7 +87,7 @@
       "debtEquity": "28.5%",
       "dividendYield": "11.0%",
       "targetPrice": "$285.00",
-      "low52": 63.07,
+      "low52": 65.19,
       "high52": 329.88,
       "avgTarget": 285.0
     },
@@ -147,7 +147,7 @@
       "debtEquity": "1.3%",
       "dividendYield": "—",
       "targetPrice": "$2,125.09",
-      "low52": 67.86,
+      "low52": 69.57,
       "high52": 2354.39,
       "avgTarget": 2125.09
     }
