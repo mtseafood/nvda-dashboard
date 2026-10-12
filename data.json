@@ -1,10 +1,10 @@
 {
-  "updated": "2026-10-09 15:05 TWN",
+  "updated": "2026-10-12 14:54 TWN",
   "stocks": {
     "NVDA": {
-      "marketCap": "$5.57T",
-      "trailingPE": "29.1x",
-      "forwardPE": "14.5x",
+      "marketCap": "$5.54T",
+      "trailingPE": "29.0x",
+      "forwardPE": "14.4x",
       "eps": "$7.91",
       "grossMargin": "74.7%",
       "revenue": "$303.0B",
@@ -17,9 +17,9 @@
       "avgTarget": 328.72
     },
     "TSLA": {
-      "marketCap": "$1.48T",
-      "trailingPE": "347.2x",
-      "forwardPE": "174.8x",
+      "marketCap": "$1.51T",
+      "trailingPE": "354.4x",
+      "forwardPE": "175.4x",
       "eps": "$1.08",
       "grossMargin": "18.9%",
       "revenue": "$103.6B",
@@ -32,9 +32,9 @@
       "avgTarget": 392.42
     },
     "AMD": {
-      "marketCap": "$1.01T",
-      "trailingPE": "158.3x",
-      "forwardPE": "39.5x",
+      "marketCap": "$992.7B",
+      "trailingPE": "155.1x",
+      "forwardPE": "38.7x",
       "eps": "$3.92",
       "grossMargin": "55.7%",
       "revenue": "$41.3B",
@@ -47,8 +47,8 @@
       "avgTarget": 636.21
     },
     "MU": {
-      "marketCap": "$1.17T",
-      "trailingPE": "13.9x",
+      "marketCap": "$1.16T",
+      "trailingPE": "13.8x",
       "forwardPE": "5.0x",
       "eps": "$74.33",
       "grossMargin": "80.7%",
@@ -57,13 +57,13 @@
       "debtEquity": "3.7%",
       "dividendYield": "6.0%",
       "targetPrice": "$1,555.13",
-      "low52": 179.61,
+      "low52": 186.25,
       "high52": 1255.0,
       "avgTarget": 1555.13
     },
     "AVGO": {
-      "marketCap": "$1.72T",
-      "trailingPE": "46.0x",
+      "marketCap": "$1.73T",
+      "trailingPE": "46.2x",
       "forwardPE": "18.6x",
       "eps": "$7.83",
       "grossMargin": "75.5%",
@@ -77,24 +77,24 @@
       "avgTarget": 531.31
     },
     "MRVL": {
-      "marketCap": "$246.8B",
-      "trailingPE": "90.3x",
-      "forwardPE": "37.7x",
+      "marketCap": "$247.4B",
+      "trailingPE": "90.6x",
+      "forwardPE": "37.8x",
       "eps": "$3.04",
       "grossMargin": "52.2%",
       "revenue": "$9.5B",
       "beta": "2.26",
       "debtEquity": "28.5%",
-      "dividendYield": "9.0%",
+      "dividendYield": "8.0%",
       "targetPrice": "$337.99",
       "low52": 70.69,
       "high52": 329.88,
       "avgTarget": 337.99
     },
     "AAPL": {
-      "marketCap": "$4.97T",
-      "trailingPE": "39.0x",
-      "forwardPE": "35.5x",
+      "marketCap": "$4.91T",
+      "trailingPE": "38.6x",
+      "forwardPE": "35.1x",
       "eps": "$8.72",
       "grossMargin": "48.7%",
       "revenue": "$466.8B",
@@ -107,24 +107,24 @@
       "avgTarget": 328.09
     },
     "MSFT": {
-      "marketCap": "$3.88T",
-      "trailingPE": "29.1x",
-      "forwardPE": "22.1x",
+      "marketCap": "$3.97T",
+      "trailingPE": "29.8x",
+      "forwardPE": "22.6x",
       "eps": "$17.95",
       "grossMargin": "67.9%",
       "revenue": "$331.8B",
       "beta": "1.10",
       "debtEquity": "29.1%",
-      "dividendYield": "75.0%",
+      "dividendYield": "74.0%",
       "targetPrice": "$587.63",
       "low52": 349.2,
       "high52": 553.72,
       "avgTarget": 587.63
     },
     "LITE": {
-      "marketCap": "$95.0B",
+      "marketCap": "$99.9B",
       "trailingPE": "虧損",
-      "forwardPE": "29.5x",
+      "forwardPE": "31.0x",
       "eps": "-$92.96",
       "grossMargin": "44.2%",
       "revenue": "$3.0B",
@@ -132,14 +132,14 @@
       "debtEquity": "36.0%",
       "dividendYield": "—",
       "targetPrice": "$1,161.96",
-      "low52": 147.81,
-      "high52": 1137.2,
+      "low52": 152.54,
+      "high52": 1143.0,
       "avgTarget": 1161.96
     },
     "SNDK": {
-      "marketCap": "$232.6B",
-      "trailingPE": "21.8x",
-      "forwardPE": "6.0x",
+      "marketCap": "$228.6B",
+      "trailingPE": "21.4x",
+      "forwardPE": "5.9x",
       "eps": "$73.76",
       "grossMargin": "71.5%",
       "revenue": "$20.2B",
@@ -147,7 +147,7 @@
       "debtEquity": "1.3%",
       "dividendYield": "—",
       "targetPrice": "$2,173.00",
-      "low52": 116.17,
+      "low52": 120.96,
       "high52": 2354.39,
       "avgTarget": 2173.0
     }
