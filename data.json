@@ -1,10 +1,10 @@
 {
-  "updated": "2026-10-27 13:56 TWN",
+  "updated": "2026-10-28 14:34 TWN",
   "stocks": {
     "NVDA": {
-      "marketCap": "$5.22T",
-      "trailingPE": "27.3x",
-      "forwardPE": "13.6x",
+      "marketCap": "$5.26T",
+      "trailingPE": "27.6x",
+      "forwardPE": "13.7x",
       "eps": "$7.91",
       "grossMargin": "74.7%",
       "revenue": "$303.0B",
@@ -17,24 +17,24 @@
       "avgTarget": 328.95
     },
     "TSLA": {
-      "marketCap": "$1.55T",
-      "trailingPE": "430.4x",
-      "forwardPE": "179.2x",
+      "marketCap": "$1.61T",
+      "trailingPE": "447.8x",
+      "forwardPE": "189.0x",
       "eps": "$0.91",
       "grossMargin": "19.3%",
       "revenue": "$103.6B",
       "beta": "1.92",
       "debtEquity": "18.3%",
       "dividendYield": "—",
-      "targetPrice": "$409.27",
+      "targetPrice": "$410.68",
       "low52": 297.38,
       "high52": 498.83,
-      "avgTarget": 409.27
+      "avgTarget": 410.68
     },
     "AMD": {
-      "marketCap": "$867.3B",
-      "trailingPE": "135.5x",
-      "forwardPE": "33.7x",
+      "marketCap": "$914.6B",
+      "trailingPE": "142.9x",
+      "forwardPE": "35.6x",
       "eps": "$3.92",
       "grossMargin": "55.7%",
       "revenue": "$41.3B",
@@ -47,9 +47,9 @@
       "avgTarget": 637.61
     },
     "MU": {
-      "marketCap": "$1.02T",
-      "trailingPE": "12.2x",
-      "forwardPE": "4.4x",
+      "marketCap": "$1.05T",
+      "trailingPE": "12.5x",
+      "forwardPE": "4.5x",
       "eps": "$74.33",
       "grossMargin": "80.7%",
       "revenue": "$133.2B",
@@ -62,24 +62,24 @@
       "avgTarget": 1561.91
     },
     "AVGO": {
-      "marketCap": "$1.57T",
-      "trailingPE": "42.0x",
-      "forwardPE": "16.9x",
+      "marketCap": "$1.63T",
+      "trailingPE": "43.7x",
+      "forwardPE": "17.6x",
       "eps": "$7.83",
       "grossMargin": "75.5%",
       "revenue": "$89.1B",
       "beta": "1.48",
       "debtEquity": "59.6%",
-      "dividendYield": "79.0%",
-      "targetPrice": "$529.10",
+      "dividendYield": "76.0%",
+      "targetPrice": "$530.14",
       "low52": 289.96,
       "high52": 495.0,
-      "avgTarget": 529.1
+      "avgTarget": 530.14
     },
     "MRVL": {
-      "marketCap": "$210.1B",
-      "trailingPE": "76.9x",
-      "forwardPE": "31.9x",
+      "marketCap": "$218.9B",
+      "trailingPE": "80.1x",
+      "forwardPE": "33.2x",
       "eps": "$3.04",
       "grossMargin": "52.2%",
       "revenue": "$9.5B",
@@ -92,39 +92,39 @@
       "avgTarget": 341.44
     },
     "AAPL": {
-      "marketCap": "$5.02T",
-      "trailingPE": "39.4x",
-      "forwardPE": "36.0x",
+      "marketCap": "$5.07T",
+      "trailingPE": "39.8x",
+      "forwardPE": "36.3x",
       "eps": "$8.72",
       "grossMargin": "48.7%",
       "revenue": "$466.8B",
       "beta": "1.07",
       "debtEquity": "78.4%",
       "dividendYield": "31.0%",
-      "targetPrice": "$329.25",
+      "targetPrice": "$330.02",
       "low52": 243.42,
       "high52": 351.73,
-      "avgTarget": 329.25
+      "avgTarget": 330.02
     },
     "MSFT": {
       "marketCap": "$3.95T",
-      "trailingPE": "29.7x",
-      "forwardPE": "22.5x",
+      "trailingPE": "29.6x",
+      "forwardPE": "22.4x",
       "eps": "$17.95",
       "grossMargin": "67.9%",
       "revenue": "$331.8B",
       "beta": "1.10",
       "debtEquity": "29.1%",
       "dividendYield": "74.0%",
-      "targetPrice": "$603.43",
+      "targetPrice": "$605.12",
       "low52": 349.2,
       "high52": 553.72,
-      "avgTarget": 603.43
+      "avgTarget": 605.12
     },
     "LITE": {
-      "marketCap": "$74.1B",
+      "marketCap": "$78.5B",
       "trailingPE": "虧損",
-      "forwardPE": "22.7x",
+      "forwardPE": "24.3x",
       "eps": "-$92.96",
       "grossMargin": "44.2%",
       "revenue": "$3.0B",
@@ -137,9 +137,9 @@
       "avgTarget": 1166.28
     },
     "SNDK": {
-      "marketCap": "$181.5B",
-      "trailingPE": "17.0x",
-      "forwardPE": "4.7x",
+      "marketCap": "$188.6B",
+      "trailingPE": "17.7x",
+      "forwardPE": "4.9x",
       "eps": "$73.76",
       "grossMargin": "71.5%",
       "revenue": "$20.2B",
