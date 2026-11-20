@@ -1,25 +1,25 @@
 {
-  "updated": "2026-11-19 16:20 TWN",
+  "updated": "2026-11-20 16:00 TWN",
   "stocks": {
     "NVDA": {
-      "marketCap": "$3.65T",
-      "trailingPE": "16.2x",
-      "forwardPE": "9.1x",
+      "marketCap": "$3.52T",
+      "trailingPE": "15.7x",
+      "forwardPE": "8.8x",
       "eps": "$9.31",
-      "grossMargin": "74.7%",
-      "revenue": "$303.0B",
+      "grossMargin": "74.9%",
+      "revenue": "$361.8B",
       "beta": "2.25",
-      "debtEquity": "17.0%",
-      "dividendYield": "64.0%",
-      "targetPrice": "$253.67",
-      "low52": 148.8,
+      "debtEquity": "14.3%",
+      "dividendYield": "66.0%",
+      "targetPrice": "$246.67",
+      "low52": 145.71,
       "high52": 243.37,
-      "avgTarget": 253.67
+      "avgTarget": 246.67
     },
     "TSLA": {
-      "marketCap": "$1.52T",
-      "trailingPE": "421.7x",
-      "forwardPE": "177.7x",
+      "marketCap": "$1.48T",
+      "trailingPE": "411.4x",
+      "forwardPE": "173.4x",
       "eps": "$0.91",
       "grossMargin": "19.3%",
       "revenue": "$103.6B",
@@ -32,10 +32,10 @@
       "avgTarget": 412.48
     },
     "AMD": {
-      "marketCap": "$877.4B",
-      "trailingPE": "113.3x",
-      "forwardPE": "30.1x",
-      "eps": "$4.68",
+      "marketCap": "$809.6B",
+      "trailingPE": "113.2x",
+      "forwardPE": "27.7x",
+      "eps": "$4.32",
       "grossMargin": "56.0%",
       "revenue": "$45.4B",
       "beta": "2.54",
@@ -47,9 +47,9 @@
       "avgTarget": 657.74
     },
     "MU": {
-      "marketCap": "$798.0B",
-      "trailingPE": "9.5x",
-      "forwardPE": "3.4x",
+      "marketCap": "$781.2B",
+      "trailingPE": "9.3x",
+      "forwardPE": "3.3x",
       "eps": "$74.33",
       "grossMargin": "80.7%",
       "revenue": "$133.2B",
@@ -62,39 +62,39 @@
       "avgTarget": 1561.91
     },
     "AVGO": {
-      "marketCap": "$1.69T",
-      "trailingPE": "45.2x",
-      "forwardPE": "18.2x",
+      "marketCap": "$1.65T",
+      "trailingPE": "44.3x",
+      "forwardPE": "17.9x",
       "eps": "$7.83",
       "grossMargin": "75.5%",
       "revenue": "$89.1B",
       "beta": "1.51",
       "debtEquity": "59.6%",
       "dividendYield": "73.0%",
-      "targetPrice": "$528.17",
+      "targetPrice": "$526.47",
       "low52": 289.77,
       "high52": 495.0,
-      "avgTarget": 528.17
+      "avgTarget": 526.47
     },
     "MRVL": {
-      "marketCap": "$131.0B",
-      "trailingPE": "47.9x",
-      "forwardPE": "19.7x",
+      "marketCap": "$124.6B",
+      "trailingPE": "45.5x",
+      "forwardPE": "18.8x",
       "eps": "$3.04",
       "grossMargin": "52.2%",
       "revenue": "$9.5B",
       "beta": "2.33",
       "debtEquity": "28.5%",
-      "dividendYield": "16.0%",
-      "targetPrice": "$310.89",
+      "dividendYield": "17.0%",
+      "targetPrice": "$309.14",
       "low52": 70.69,
       "high52": 329.88,
-      "avgTarget": 310.89
+      "avgTarget": 309.14
     },
     "AAPL": {
-      "marketCap": "$5.12T",
-      "trailingPE": "39.2x",
-      "forwardPE": "33.3x",
+      "marketCap": "$5.07T",
+      "trailingPE": "38.9x",
+      "forwardPE": "33.0x",
       "eps": "$8.98",
       "grossMargin": "48.8%",
       "revenue": "$478.8B",
@@ -107,24 +107,24 @@
       "avgTarget": 345.63
     },
     "MSFT": {
-      "marketCap": "$3.77T",
-      "trailingPE": "26.5x",
-      "forwardPE": "21.0x",
+      "marketCap": "$3.70T",
+      "trailingPE": "26.0x",
+      "forwardPE": "20.6x",
       "eps": "$19.16",
       "grossMargin": "67.7%",
       "revenue": "$346.4B",
       "beta": "1.04",
       "debtEquity": "28.5%",
-      "dividendYield": "77.0%",
+      "dividendYield": "79.0%",
       "targetPrice": "$636.12",
       "low52": 349.2,
       "high52": 559.15,
       "avgTarget": 636.12
     },
     "LITE": {
-      "marketCap": "$50.0B",
+      "marketCap": "$48.5B",
       "trailingPE": "虧損",
-      "forwardPE": "13.7x",
+      "forwardPE": "13.3x",
       "eps": "-$89.62",
       "grossMargin": "48.0%",
       "revenue": "$3.7B",
@@ -137,19 +137,19 @@
       "avgTarget": 1064.75
     },
     "SNDK": {
-      "marketCap": "$110.4B",
-      "trailingPE": "6.2x",
-      "forwardPE": "2.7x",
-      "eps": "$125.12",
+      "marketCap": "$107.5B",
+      "trailingPE": "48.3x",
+      "forwardPE": "20.9x",
+      "eps": "$15.64",
       "grossMargin": "80.0%",
       "revenue": "$29.0B",
       "beta": "—",
       "debtEquity": "1.1%",
       "dividendYield": "—",
-      "targetPrice": "$2,047.38",
+      "targetPrice": "$255.92",
       "low52": 183.0,
       "high52": 2354.39,
-      "avgTarget": 2047.38
+      "avgTarget": 255.92
     }
   }
 }
