@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-26 17:07 TWN",
+  "updated": "2026-11-27 17:23 TWN",
   "stocks": {
     "NVDA": {
       "marketCap": "$3.61T",
@@ -19,7 +19,7 @@
     "TSLA": {
       "marketCap": "$1.50T",
       "trailingPE": "417.7x",
-      "forwardPE": "176.1x",
+      "forwardPE": "175.7x",
       "eps": "$0.91",
       "grossMargin": "19.3%",
       "revenue": "$103.6B",
@@ -34,7 +34,7 @@
     "AMD": {
       "marketCap": "$672.0B",
       "trailingPE": "86.8x",
-      "forwardPE": "23.0x",
+      "forwardPE": "23.1x",
       "eps": "$4.68",
       "grossMargin": "56.0%",
       "revenue": "$45.4B",
@@ -47,7 +47,7 @@
       "avgTarget": 649.89
     },
     "MU": {
-      "marketCap": "$680.3B",
+      "marketCap": "$682.4B",
       "trailingPE": "8.1x",
       "forwardPE": "2.9x",
       "eps": "$74.33",
@@ -64,7 +64,7 @@
     "AVGO": {
       "marketCap": "$1.44T",
       "trailingPE": "38.4x",
-      "forwardPE": "15.5x",
+      "forwardPE": "15.6x",
       "eps": "$7.83",
       "grossMargin": "75.5%",
       "revenue": "$89.1B",
@@ -125,14 +125,14 @@
       "marketCap": "$43.2B",
       "trailingPE": "虧損",
       "forwardPE": "11.9x",
-      "eps": "-$105.94",
+      "eps": "-$89.62",
       "grossMargin": "48.0%",
       "revenue": "$3.7B",
       "beta": "1.65",
       "debtEquity": "31.3%",
       "dividendYield": "—",
       "targetPrice": "$1,022.38",
-      "low52": 279.06,
+      "low52": 288.5,
       "high52": 1143.0,
       "avgTarget": 1022.38
     },
@@ -146,10 +146,10 @@
       "beta": "—",
       "debtEquity": "1.1%",
       "dividendYield": "—",
-      "targetPrice": "$243.36",
+      "targetPrice": "$244.96",
       "low52": 23.46,
       "high52": 294.3,
-      "avgTarget": 243.36
+      "avgTarget": 244.96
     }
   }
 }
